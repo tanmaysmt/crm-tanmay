@@ -1,0 +1,60 @@
+<div class="hold-transition login-page" *ngIf="loading">
+    <div class="boxes">
+        <div class="box">
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+        </div>
+        <div class="box">
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+        </div>
+        <div class="box">
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+        </div>
+        <div class="box">
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+        </div>
+    </div>
+</div>
+<div class="hold-transition login-page" *ngIf="loading==false">
+    <div class="login-box">
+        <div class="card">
+          <div class="login-logo" style = "margin-top: 35px; ">
+            <img src="assets/images/logo.png" style="height:auto;width:40%;" />
+          </div>
+            <div class="card-body login-card-body">
+                <p class="login-box-msg">Verify OTP</p>
+                <form [formGroup]= "OTPform"   (ngSubmit)='onSubmitOtp(OTPform.value)'>
+                    <div class="input-group mb-3">
+                        <input type="password" maxlength="6" class="form-control" [class.is-invalid]="OTPform.get('otp')?.invalid && OTPform.get('otp')?.touched" formControlName="otp" placeholder="6 Digits">
+                        <div class="input-group-append">
+                            <div class="input-group-text">
+                                <span class="fas fa-key"></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-12">
+                            <button type="submit" class="btn btn-primary btn-block">Submit OTP</button>
+                        </div>
+                    </div>
+                    <div class="input-group mb-3">
+                        <div class="text-center mt-4">
+                            Don't get an OTP ? <a href="javascript:void(0);" class="text-primary" (click)="resendOtp()">Resend</a>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

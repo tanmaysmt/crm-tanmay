@@ -1,0 +1,413 @@
+<div class="wrapper">
+    <app-navbar (permissions)="receiveMessage($event)" (userinfo)="receiveUserInfo($event)"></app-navbar>
+    <app-aside></app-aside>
+    <div class="content-wrapper">
+        <div class="card card card-primary card-outline">
+            <div class="card-body">
+                <div class="row mb-2">
+                    <div class="col-sm-6">
+                        <h3 class="m-0 text-dark">Members</h3>
+                    </div> 
+                    <div class="col-sm-6">
+                        <ol class="breadcrumb float-sm-right">
+                            <li class="breadcrumb-item">
+                                <button  type="button" class="btn btn-primary  btn-sm" data-toggle="modal" data-target="#modal-default"><i class="fa fa-plus"></i> Members</button>
+                            </li>
+                        </ol>
+                    </div>
+                </div>
+                <ul class="nav nav-tabs" id="custom-content-below-tab" role="tablist">
+                    <li class="nav-item">
+                        <a class="nav-link active" id="custom-content-below-home-tab" data-toggle="pill"
+                            href="#custom-content-below-home" role="tab" aria-controls="custom-content-below-home"
+                            aria-selected="true">Members</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" id="custom-content-below-profile-tab" data-toggle="pill"
+                            href="#custom-content-below-profile" role="tab" aria-controls="custom-content-below-profile"
+                            aria-selected="false">Profiles</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" id="custom-content-below-messages-tab" data-toggle="pill"
+                            href="#custom-content-below-messages" role="tab" aria-controls="custom-content-below-messages"
+                            aria-selected="false">Roles</a>
+                    </li>
+                </ul>
+                <div class="tab-content" id="custom-content-below-tabContent">
+                    <div class="tab-pane fade active show" id="custom-content-below-home" role="tabpanel"
+                        aria-labelledby="custom-content-below-home-tab">
+                        <div class="row">
+                            <div class="col-12">
+                                <div class="card">
+                                    <div class="card-header">                                          
+                                        <mat-form-field appearance="fill" style="width: 200px;">
+                                            <mat-label>Enter a date range</mat-label>
+                                            <mat-date-range-input [formGroup]="range" [rangePicker]="picker" >
+                                                <input matStartDate formControlName="start" placeholder="Start date">
+                                                <input matEndDate formControlName="end" placeholder="End date" (dateChange)="getDateRange(range.value)">
+                                            </mat-date-range-input>
+                                            <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                                            <mat-date-range-picker #picker></mat-date-range-picker>
+                                        </mat-form-field> &nbsp;&nbsp;
+                                        <mat-form-field appearance="fill" style="width: 130px;">
+                                            <mat-label>Type</mat-label>
+                                            <mat-select (selectionChange)="FilterRoleSubmit()" [(ngModel)]="FilterRole" name="type">
+                                                <mat-option *ngFor="let role of rolelist" [value]="role.id">{{role.name}}</mat-option>
+                                            </mat-select>
+                                        </mat-form-field> &nbsp;&nbsp;
+                                        <mat-form-field appearance="fill" style="width: 130px;">
+                                        <input matInput placeholder="Search" [(ngModel)]="SearchLead">
+                                        </mat-form-field> &nbsp;
+                                        <button mat-raised-button color="primary" (click)="applyfilter()">Apply</button>&nbsp;
+                                        <button mat-stroked-button color="primary" (click)="clearFilter()">Clear</button>                                     
+                                    </div>
+                                    <div class="card-body table-responsive p-0" style="height: 500px;">
+                                        <div *ngIf="loading">
+                                            <app-loader></app-loader>
+                                        </div>
+                                        <table  mat-table [dataSource]="dataSource" matSort (matSortChange)="announceSortChange($event)" style ="width: 100%;"> 
+                                            <ng-container matColumnDef="name">
+                                                <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by name">Name</th>
+                                                <td mat-cell *matCellDef="let element">
+                                                    <a routerLink="/crm/dashboard/member/{{element.id}}/{{orgId}}/{{element.user.uniqueId}}">{{element.user.name}}</a> <strong> ( {{element.role.name}} )</strong>
+                                                </td>
+                                            </ng-container>
+                                            <ng-container matColumnDef="phone">
+                                                <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by phone">Phone</th>
+                                                <td mat-cell *matCellDef="let element">{{element.user.phone}}</td>
+                                            </ng-container>
+                                            <ng-container matColumnDef="email">
+                                                <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by email">Email</th>
+                                                <td mat-cell *matCellDef="let element">{{element.user.email}}</td>
+                                            </ng-container>  
+                                            <ng-container matColumnDef="status">
+                                                <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by status">Status</th>
+                                                <td mat-cell *matCellDef="let element">                                                 
+                                                    <select class="custom-select" (change)="changeStatus(element.id,$event)">
+                                                        <option style="color:red;" value="0" [selected]="element.is_block==0">Disable</option>
+                                                        <option style="color:green;"value="1" [selected]="element.is_block==1"  >Enable</option>
+                                                    </select>
+                                                </td>
+                                            </ng-container>                                     
+                                            <ng-container matColumnDef="created_at">
+                                                <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by created_at">Created</th>
+                                                <td mat-cell *matCellDef="let element">&nbsp;&nbsp;{{element.created_at | date:'fullDate'}}</td>
+                                            </ng-container>
+                                            <ng-container matColumnDef="id">
+                                                <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by id">Action</th>
+                                                <td mat-cell *matCellDef="let element">
+                                                    <div class="btn-group btn-group-sm">
+                                                        <a routerLink="/crm/profile/{{element.id}}/{{orgId}}/{{element.user.uniqueId}}" class="btn btn-info"><i class="fas fa-eye"></i></a>
+                                                        <button (click)="ConfirmAlert(element.user.uniqueId,element.id)" class="btn btn-danger"><i class="fas fa-trash"></i></button>
+                                                    </div>
+                                                </td>
+                                            </ng-container>
+                                            <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                                            <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr> 
+                                        </table>   
+                                        <app-no-data *ngIf = "shownocard"></app-no-data>                                                         
+                                        <div class="card-footer">
+                                            <mat-paginator [length]="totalRows" [pageIndex]="currentPage" [pageSize]="pageSize"
+                                            [pageSizeOptions]="pageSizeOptions" (page)="pageChanged($event)" showFirstLastButtons aria-label="Select page of periodic elements"> 
+                                            </mat-paginator> 
+                                        </div>                                                                         
+                                    </div>
+                                </div>
+                            </div>
+                            <section></section>
+                        </div>
+                    </div>
+                    <div class="tab-pane fade" id="custom-content-below-profile" role="tabpanel"
+                        aria-labelledby="custom-content-below-profile-tab">
+                        <div class="row">
+                            <div class="col-12">
+                                <div class="card">
+                                    <div class="card-header">
+                                        <button type="button" class="btn btn-primary  btn-sm" data-toggle="modal" data-target="#modal-default1"><i class="fa fa-plus"></i> Profile</button>                                                  
+                                    </div>
+                                    <div class="card-body table-responsive p-0" style="height: 500px;">
+                                        <table id="example1" class="table table-fixed">
+                                            <thead>
+                                                <tr>
+                                                    <th>Profile Name</th>
+                                                    <th>Profile Description</th>
+                                                    <th>CreatedBy</th>
+                                                    <th>ModifiedBy</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr *ngFor="let profile of acTypes">
+                                                    <td>
+                                                        <a routerLink="/crm/permissions/{{profile.id}}">{{profile.name}}</a>
+                                                    </td>
+                                                    <td><p>{{profile.description}}</p></td>
+                                                    <td></td>
+                                                    <td></td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="tab-pane fade" id="custom-content-below-messages" role="tabpanel"
+                        aria-labelledby="custom-content-below-messages-tab">
+                        <div class="row">
+                            <div class="col-12">
+                                <div class="card">
+                                    <div class="card-header">
+                                        <button type="button" class="btn btn-primary  btn-sm" data-toggle="modal" data-target="#modal-default2"><i class="fa fa-plus"></i> Role</button>             
+                                    </div>
+                                    <div class="card-body table-responsive p-0">
+                                        <div class="treeview js-treeview">
+                                            <ul>
+                                                <li>
+                                                    <div class="treeview__level" data-level="A">
+                                                        <span class="level-title">{{orgaz}}</span>
+                                                        <div class="treeview__level-btns">
+                                                            <div class="btn btn-default btn-sm level-same"><span>Add Same Level</span></div>
+                                                            <div class="btn btn-default btn-sm level-sub"><span>Add Sub Level</span></div>
+                                                        </div>
+                                                    </div>
+                                                    <ul>
+                                                        <li *ngFor = "let role of roles">
+                                                            <div class="treeview__level" data-level="B">
+                                                                <span class="level-title">{{role.name}}</span>
+                                                                <div class="treeview__level-btns">
+                                                                    <div class="btn btn-default btn-sm level-add"><span class="fa fa-edit" (click)="openRoleModel(role,'edit')"></span></div>
+                                                                    <div class="btn btn-default btn-sm level-add"><span class="fa fa-plus" (click)="openRoleModel(role,'add')"></span></div>
+                                                                    <div class="btn btn-default btn-sm level-remove"><span class="fa fa-trash text-danger"></span></div>
+                                                                    <div class="btn btn-default btn-sm level-same"><span>Add Same Level</span></div>
+                                                                    <div class="btn btn-default btn-sm level-sub"><span>Add Sub Level</span></div>
+                                                                </div>
+                                                            </div>
+                                                            <ul *ngIf = "role.children">
+                                                                <li *ngFor = "let role of role.children">
+                                                                    <div class="treeview__level" data-level="C">
+                                                                        <span class="level-title">{{role.name}}</span>
+                                                                        <div class="treeview__level-btns">
+                                                                            <div class="btn btn-default btn-sm level-add"><span class="fa fa-edit" (click)="openRoleModel(role,'edit')"></span></div>
+                                                                            <div class="btn btn-default btn-sm level-add"><span class="fa fa-plus" (click)="openRoleModel(role,'add')"></span></div>
+                                                                            <div class="btn btn-default btn-sm level-remove"><span class="fa fa-trash text-danger"></span></div>
+                                                                            <div class="btn btn-default btn-sm level-same"><span>Add Same Level</span></div>
+                                                                            <div class="btn btn-default btn-sm level-sub"><span>Add Sub Level</span></div>
+                                                                        </div>
+                                                                    </div>
+                                                                    <ul *ngIf = "role.children">
+                                                                        <li *ngFor = "let role of role.children">
+                                                                            <div class="treeview__level" data-level="D">
+                                                                                <span class="level-title">{{role.name}}</span>
+                                                                                <div class="treeview__level-btns">
+                                                                                    <div class="btn btn-default btn-sm level-add"><span class="fa fa-edit" (click)="openRoleModel(role,'edit')"></span></div>
+                                                                                    <div class="btn btn-default btn-sm level-add"><span class="fa fa-plus" (click)="openRoleModel(role,'add')"></span></div>
+                                                                                    <div class="btn btn-default btn-sm level-remove"><span class="fa fa-trash text-danger"></span></div>
+                                                                                    <div class="btn btn-default btn-sm level-same"><span>Add Same Level</span></div>
+                                                                                    <div class="btn btn-default btn-sm level-sub"><span>Add Sub Level</span></div>
+                                                                                </div>
+                                                                            </div>
+                                                                            <ul *ngIf = "role.children">
+                                                                                <li *ngFor = "let role of role.children">
+                                                                                    <div class="treeview__level" data-level="E">
+                                                                                        <span class="level-title">{{role.name}}</span>
+                                                                                        <div class="treeview__level-btns">
+                                                                                            <div class="btn btn-default btn-sm level-add"><span class="fa fa-edit" (click)="openRoleModel(role,'edit')"></span></div>
+                                                                                            <div class="btn btn-default btn-sm level-add"><span class="fa fa-plus" (click)="openRoleModel(role,'add')"></span></div>
+                                                                                            <div class="btn btn-default btn-sm level-remove"><span class="fa fa-trash text-danger"></span></div>
+                                                                                            <div class="btn btn-default btn-sm level-same"><span>Add Same Level</span></div>
+                                                                                            <div class="btn btn-default btn-sm level-sub"><span>Add Sub Level</span></div>
+                                                                                        </div>
+                                                                                    </div>
+                                                                                    <ul *ngIf = "role.children">
+                                                                                        <li *ngFor = "let role of role.children">
+                                                                                            <div class="treeview__level" data-level="F">
+                                                                                                <span class="level-title">{{role.name}}</span>
+                                                                                                <div class="treeview__level-btns">
+                                                                                                    <div class="btn btn-default btn-sm level-add"><span class="fa fa-edit" (click)="openRoleModel(role,'edit')"></span></div>
+                                                                                                    <div class="btn btn-default btn-sm level-add"><span class="fa fa-plus" (click)="openRoleModel(role,'add')"></span></div>
+                                                                                                    <div class="btn btn-default btn-sm level-remove"><span class="fa fa-trash text-danger"></span></div>
+                                                                                                    <div class="btn btn-default btn-sm level-same"><span>Add Same Level</span></div>
+                                                                                                    <div class="btn btn-default btn-sm level-sub"><span>Add Sub Level</span></div>
+                                                                                                </div>
+                                                                                            </div>
+                                                                                            <ul *ngIf = "role.children">
+                                                                                                <li *ngFor = "let role of role.children">
+                                                                                                    <div class="treeview__level" data-level="G">
+                                                                                                        <span class="level-title">{{role.name}}</span>
+                                                                                                        <div class="treeview__level-btns">
+                                                                                                            <div class="btn btn-default btn-sm level-add"><span class="fa fa-edit" (click)="openRoleModel(role,'edit')"></span></div>
+                                                                                                            <div class="btn btn-default btn-sm level-add"><span class="fa fa-plus" (click)="openRoleModel(role,'add')"></span></div>
+                                                                                                            <div class="btn btn-default btn-sm level-remove"><span class="fa fa-trash text-danger"></span></div>
+                                                                                                            <div class="btn btn-default btn-sm level-same"><span>Add Same Level</span></div>
+                                                                                                            <div class="btn btn-default btn-sm level-sub"><span>Add Sub Level</span></div>
+                                                                                                        </div>
+                                                                                                    </div>
+                                                                                                    <ul *ngIf = "role.children">
+                                                                                                        <li *ngFor = "let role of role.children">
+                                                                                                            <div class="treeview__level" data-level="H">
+                                                                                                                <span class="level-title">{{role.name}}</span>
+                                                                                                                <div class="treeview__level-btns">
+                                                                                                                    <div class="btn btn-default btn-sm level-add"><span class="fa fa-edit" (click)="openRoleModel(role,'edit')"></span></div>
+                                                                                                                    <div class="btn btn-default btn-sm level-add"><span class="fa fa-plus" (click)="openRoleModel(role,'add')"></span></div>
+                                                                                                                    <div class="btn btn-default btn-sm level-remove"><span class="fa fa-trash text-danger"></span></div>
+                                                                                                                    <div class="btn btn-default btn-sm level-same"><span>Add Same Level</span></div>
+                                                                                                                    <div class="btn btn-default btn-sm level-sub"><span>Add Sub Level</span></div>
+                                                                                                                </div>
+                                                                                                            </div>
+                                                                                                            <ul *ngIf = "role.children">
+                                                                                                                <li *ngFor = "let role of role.children">
+                                                                                                                    <div class="treeview__level" data-level="I">
+                                                                                                                        <span class="level-title">{{role.name}}</span>
+                                                                                                                        <div class="treeview__level-btns">
+                                                                                                                            <div class="btn btn-default btn-sm level-add"><span class="fa fa-edit" (click)="openRoleModel(role,'edit')"></span></div>
+                                                                                                                            <div class="btn btn-default btn-sm level-add"><span class="fa fa-plus" (click)="openRoleModel(role,'add')"></span></div>
+                                                                                                                            <div class="btn btn-default btn-sm level-remove"><span class="fa fa-trash text-danger"></span></div>
+                                                                                                                            <div class="btn btn-default btn-sm level-same"><span>Add Same Level</span></div>
+                                                                                                                            <div class="btn btn-default btn-sm level-sub"><span>Add Sub Level</span></div>
+                                                                                                                        </div>
+                                                                                                                    </div>
+                                                                                                                    <ul *ngIf = "role.children">
+                                                                                                                        <li *ngFor = "let role of role.children">
+                                                                                                                            <div class="treeview__level" data-level="J">
+                                                                                                                                <span class="level-title">{{role.name}}</span>
+                                                                                                                                <div class="treeview__level-btns">
+                                                                                                                                    <div class="btn btn-default btn-sm level-add"><span class="fa fa-edit" (click)="openRoleModel(role,'edit')"></span></div>
+                                                                                                                                    <div class="btn btn-default btn-sm level-add"><span class="fa fa-plus" (click)="openRoleModel(role,'add')"></span></div>
+                                                                                                                                    <div class="btn btn-default btn-sm level-remove"><span class="fa fa-trash text-danger"></span></div>
+                                                                                                                                    <div class="btn btn-default btn-sm level-same"><span>Add Same Level</span></div>
+                                                                                                                                    <div class="btn btn-default btn-sm level-sub"><span>Add Sub Level</span></div>
+                                                                                                                                </div>
+                                                                                                                            </div>
+                                                                                                                        </li>
+                                                                                                                    </ul>
+                                                                                                                </li>
+                                                                                                            </ul>
+                                                                                                        </li>
+                                                                                                    </ul>
+                                                                                                </li>
+                                                                                            </ul>
+                                                                                        </li>
+                                                                                    </ul>
+                                                                                </li>
+                                                                            </ul>
+                                                                        </li>
+                                                                    </ul>
+                                                                </li>
+                                                            </ul>
+                                                        </li>
+                                                    </ul>
+                                                </li>
+                                            </ul>
+                                        </div>                                   
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>      
+    </div>
+    <app-footer></app-footer>
+</div>
+<div class="modal fade" id="modal-default">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-body">
+                <div class="card card-primary">
+                    <div class="card-header">
+                        <h3 class="card-title"><small>An Invitation Link to be sent at this Email Address</small></h3>
+                    </div>
+                    <form role="form" [formGroup]= "AddUserAccount" (ngSubmit)='onSubmit(AddUserAccount.value)'>
+                        <div class="card-body">
+                            <div class="form-group">
+                                <label>Email</label><small class="text-danger">*</small>
+                                <input type="email" name="email"  [class.is-invalid]="AddUserAccount.get('email')?.invalid && AddUserAccount.get('email')?.touched" class="form-control" formControlName="email" placeholder="Enter Email">
+                            </div>
+                            <div class="form-group">
+                                <label>Roles</label><small class="text-danger">*</small>
+                                <select class="form-control select2 select2bs4" formControlName = "role" style="width: 100%;">
+                                    <option *ngFor="let profile of rolelist" value="{{profile.id}}">{{profile.name}}</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label>Account Type</label><small class="text-danger">*</small>
+                                <select class="form-control select2 select2bs4" formControlName = "account_type" style="width: 100%;">
+                                    <option *ngFor="let role of acTypes" value="{{role.id}}">{{role.name}}</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="modal-footer justify-content-between">
+                            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                            <button type="submit" [disabled]="SendButton" class="btn btn-primary">Send</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="modal-default1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Add Profile</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form role="form" [formGroup]= "AddProfile" (ngSubmit)='onProfileSubmit(AddProfile.value)'>
+                    <div class="card-body">
+                        <div class="form-group">
+                            <label>Profile Name</label><small class="text-danger">*</small>
+                            <input type="text" name="email" [class.is-invalid]="AddProfile.get('profile_name')?.invalid && AddProfile.get('profile_name')?.touched" class="form-control" formControlName="profile_name" placeholder="Enter Account Name">
+                        </div>
+                        <div class="form-group">
+                            <label>Profile Description</label><small class="text-danger">*</small>
+                            <textarea class="form-control" rows="3"[class.is-invalid]="AddProfile.get('profile_description')?.invalid && AddProfile.get('profile_description')?.touched" formControlName="profile_description" placeholder="Enter ..."></textarea>
+                          </div>
+                    </div>
+                    <div class="card-footer">
+                        <button type="submit" [disabled]="ProfileSendButton" class="btn btn-primary">Submit</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="modal-default2">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Add Roles</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form [formGroup]= "AddRoles" (ngSubmit)='onRoleSubmit(AddRoles.value)'>
+                    <div class="card-body">
+                        <div class="form-group">
+                            <label>Role Name</label><small class="text-danger">*</small>
+                            <input type="text" name="email" [class.is-invalid]="AddRoles.get('role_name')?.invalid && AddRoles.get('role_name')?.touched" class="form-control" formControlName="role_name" placeholder="Enter Designation">
+                        </div>
+                        <div *ngIf="removeSubordinate" class="form-group">
+                            <label>Subordinate of</label><small class="text-danger">*</small>
+                            <select class="form-control" formControlName="Subrole">
+                                <option *ngFor = "let role of rolelist" value = "{{role.id}}">{{role.name}}</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Role Description</label><small class="text-danger">*</small>
+                            <textarea class="form-control" rows="3" [class.is-invalid]="AddRoles.get('role_description')?.invalid && AddRoles.get('role_description')?.touched" formControlName="role_description" placeholder="Enter ..."></textarea>
+                        </div>
+                    </div>
+                    <div class="card-footer">
+                        <button type="submit" [disabled]="RoleSendButton" class="btn btn-primary">Submit</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

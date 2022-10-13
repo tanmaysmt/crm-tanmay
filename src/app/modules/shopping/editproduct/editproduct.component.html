@@ -1,0 +1,164 @@
+<div class="hold-transition sidebar-mini layout-fixed mat-typography">
+<div class="wrapper">
+    <app-navbar ></app-navbar>
+    <app-aside ></app-aside>
+    <div class="cardsloader" *ngIf="loading">
+        <div class="cardloader is-loading">
+            <div class="content">
+                <h2></h2>
+            </div>
+        </div>
+    </div>
+    <div class="content-wrapper">
+        <div class="content-header">
+            <div class="container-fluid">
+                <div class="row mb-2">
+                    <div class="col-sm-6">
+                        <h1 class="m-0 text-dark">Product</h1>
+                    </div> 
+                </div>
+            </div>
+        </div>
+        <section class="content">
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-12">
+                        <div class="card">
+                            <div class="col-12">
+                                <div class="card-header">
+                                    <button  class="btn btn-primary  btn-sm" (click)="onSubmit(editProduct.value)" ><i class="fas fa-save"></i> Product</button>
+                                    <button  type="button" class="btn btn-warning   btn-sm m-2" (click)="back()" data-toggle="modal" data-target="#modal-default"><i class="fa fa-reply" aria-hidden="true"></i> Back</button>
+                                </div>
+                                <div class="card-header p-0 pt-1 border-bottom-0">
+                                    <ul class="nav nav-tabs" id="custom-tabs-three-tab" role="tablist">
+                                        <li class="nav-item">
+                                            <a class="nav-link active" id="custom-tabs-three-home-tab" data-toggle="pill" href="#custom-tabs-three-home" role="tab" aria-controls="custom-tabs-three-home" aria-selected="true">General</a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link" id="custom-tabs-three-profile-tab" data-toggle="pill" href="#custom-tabs-three-profile" role="tab" aria-controls="custom-tabs-three-profile" aria-selected="false">Data</a>
+                                        </li>
+                                    </ul>
+                                </div>
+                                <div class="card-body">
+                                    <form class="form-horizontal" role="form" [formGroup]= "editProduct">
+                                        <div class="tab-content" id="custom-tabs-three-tabContent">
+                                            <div class="tab-pane fade active show" id="custom-tabs-three-home" role="tabpanel" aria-labelledby="custom-tabs-three-home-tab">
+                                                <div class="card-body">
+                                                    <div class="form-group row">
+                                                        <label for="inputEmail3" class="col-sm-3 col-form-label">Product Title <span style="color: crimson;">*</span></label>
+                                                        <div class="col-sm-9">
+                                                            <input type="text" class="form-control" formControlName="product_title" id="inputEmail3" placeholder="Product Title" />
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-group row">
+                                                        <label for="inputEmail3" class="col-sm-3 col-form-label">Product Category</label>
+                                                        <div class="col-sm-9">
+                                                            <select class="form-control" formControlName="category">
+                                                                <option value="">Please Select</option>
+                                                                <option *ngFor = "let category of categories" value="{{category.id}}">{{category.category_title}}</option>
+                                                            </select>
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-group row">
+                                                        <label for="inputEmail3" class="col-sm-3 col-form-label">Product Brand</label>
+                                                        <div class="col-sm-9">
+                                                            <select class="form-control" formControlName="brand">
+                                                                <option value="">Please Select</option>
+                                                                <option *ngFor = "let brand of brands" value="{{brand.id}}">{{brand.brand_title}}</option>
+                                                            </select>
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-group row">
+                                                        <label for="inputEmail3" class="col-sm-3 col-form-label">Product Price <span style="color: crimson;">*</span></label>
+                                                        <div class="col-sm-9">
+                                                            <input type="number" class="form-control" formControlName="price" id="inputEmail3" placeholder="Rs." />
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-group row">
+                                                        <label for="inputEmail3" class="col-sm-3 col-form-label">Sku <span style="color: crimson;">*</span></label>
+                                                        <div class="col-sm-9">
+                                                            <input type="text" class="form-control" formControlName="sku" id="inputEmail3" placeholder="sku." />
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-group row">
+                                                        <label for="inputEmail3" class="col-sm-3 col-form-label">Model <span style="color: crimson;">*</span></label>
+                                                        <div class="col-sm-9">
+                                                            <input type="text" class="form-control" formControlName="model" id="inputEmail3" placeholder="MODEL123." />
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-group row">
+                                                        <label for="inputEmail3" class="col-sm-3 col-form-label">Status</label>
+                                                        <div class="col-sm-9">
+                                                            <select class="form-control" formControlName="status">
+                                                                <option value="">Please Select</option>
+                                                                <option value="1">Enable</option>
+                                                                <option value="0">Disable</option>
+                                                            </select>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="tab-pane fade" id="custom-tabs-three-profile" role="tabpanel" aria-labelledby="custom-tabs-three-profile-tab">
+                                                <div class="card-body">
+                                                    <div class="form-group row">
+                                                        <label for="inputEmail3" class="col-sm-3 col-form-label">Available <span style="color: crimson;">*</span></label>
+                                                        <div class="col-sm-9">
+                                                            <input type="text" class="form-control" formControlName="availability" id="inputEmail3" placeholder="availability." />
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-group row">
+                                                        <label for="inputEmail3" class="col-sm-3 col-form-label">Stock</label>
+                                                        <div class="col-sm-9">
+                                                            <select class="form-control" formControlName="stock">
+                                                                <option value="">Please Select</option>
+                                                                <option value="Stock">Stock</option>
+                                                                <option value="Out Of Stock">Out Of Stock</option>
+                                                            </select>
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-group row">
+                                                        <label for="inputEmail3" class="col-sm-3 col-form-label">Unit Type</label>
+                                                        <div class="col-sm-9">
+                                                            <select class="form-control" formControlName="unit_type">
+                                                                <option value="">Please Select</option>
+                                                                <option value="Solid">Solid</option>
+                                                                <option value="Liquid">Liquid</option>
+                                                                <option value="Packet">Packet</option>
+                                                                <option value="Piece">Piece</option>
+                                                            </select>
+                                                        </div>
+                                                    </div>
+                                                    
+                                                    <div class="form-group row">
+                                                        <label class="col-sm-3 col-form-label">Description</label>
+                                                        <div class="col-sm-9">                                                   
+                                                            <ckeditor (change)="onChange($event)" formControlName="descriptions" [editor]="Editor"></ckeditor>
+                                                        </div><!-- Meta Tag Title -->
+                                                    </div>
+                                                    <div class="form-group row">
+                                                        <label class="col-sm-3 col-form-label">Quick overview</label>
+                                                        <div class="col-sm-9">                                                   
+                                                            <ckeditor (change)="onChange($event)" formControlName="quick_overview" [editor]="Editor"></ckeditor>
+                                                        </div><!-- Meta Tag Title -->
+                                                    </div>
+                                                    <div class="form-group row">
+                                                        <label for="inputEmail3" class="col-sm-3 col-form-label">Product Image</label>
+                                                        <div class="col-sm-9">
+                                                            <input type="file" class="form-control" (change)="onfileselected($event)"/>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+    <app-footer></app-footer>
+<div>
+<div>

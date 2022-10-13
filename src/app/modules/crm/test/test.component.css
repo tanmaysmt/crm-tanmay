@@ -1,0 +1,54 @@
+*{
+	font-family: "Source Sans Pro", sans-serif;
+}
+body {
+	background-color: #f1f5f8;
+}
+h1 input {
+	width: 110px;
+	padding: 0 5px;
+}
+@keyframes check-animation {
+	from {
+		transform: rotateY(90deg);
+	}
+	
+	to {
+		transform: rotateY(0deg);
+	}
+}
+.check {
+	animation-name: check-animation;
+	animation-duration: 1s;
+}
+
+.fixed {
+	transform: rotateY(90deg);
+}
+.container {
+	border: 1px solid #8d8d8d;
+	background-color: #f1f5f8;
+}
+
+.no-data .img-container {
+	max-width: 400px;
+}
+.card {
+	background-image: linear-gradient(to top right, #ba3665, #202671);
+	color: #dbdbdb;
+}
+.card .card-indicator {
+	width: 40px;
+    height: 40px;
+    background: #0a276a;
+    line-height: 40px;
+	font-size: 18px;
+}
+.card .btn {
+	background-color: #1d2833;
+	color: #afaaff;
+}
+.card .btn:hover {
+	color: #ff6262 !important;
+	box-shadow: 2px 2px 5px black;
+}

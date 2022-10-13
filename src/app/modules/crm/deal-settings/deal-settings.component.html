@@ -1,0 +1,71 @@
+<div class="hold-transition sidebar-mini layout-fixed mat-typography">
+<div class="wrapper">
+    <app-navbar ></app-navbar>
+    <app-aside ></app-aside>
+    <div class="content-wrapper kanban">
+        <section class="content-header">
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-sm-6">
+                        <h1>Deals Status</h1>
+                    </div>
+                    <div class="col-sm-6 d-none d-sm-block">
+                        <ol class="breadcrumb float-sm-right">
+                        </ol>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <section class="content pb-3">
+            <div class="container-fluid h-100">
+                <div class="card">
+                    <div class="card-header border-transparent">
+                        <h3 class="card-title">Select Status of deals which you would like to show</h3>
+                        <div class="card-tools">
+                            <button type="button" class="btn btn-tool" data-card-widget="collapse">
+                                <i class="fas fa-minus"></i>
+                            </button>
+                            <button type="button" class="btn btn-tool" data-card-widget="remove">
+                                <i class="fas fa-times"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="card-body p-0">
+                        <div class="card-body">
+                            <div class="cardsloader" *ngIf="loading">
+                                <div class="cardloader is-loading">
+                                    <div class="content">
+                                        <h2></h2>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="tab-content">
+                                <div class="tab-pane active" id="settings">
+                                    <form class="form-horizontal" #selectStatus="ngForm" (ngSubmit)='onSubmit(selectStatus)'>
+                                        <div  *ngFor="let status  of DealStatusGroup ; let i = index"  class="form-group row">
+                                            <label for="" class="col-sm-2 col-form-label"></label>
+                                            <div class="col-sm-10">
+                                                <div class="icheck-primary d-inline">
+                                                    <input type="checkbox" id="{{status.id}}"  name="statusIds" [checked]="status.is_checked" (change)="changeCheckbox($event, i)">
+                                                    <label for="{{status.id}}">{{status.name}}
+                                                    </label>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div *ngIf="submit"class="form-group row">
+                                            <div class="offset-sm-2 col-sm-10">
+                                                <button type="submit" class="btn btn-warning">Submit</button>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+    <app-footer *ngIf="loading==false"></app-footer>
+<div>
+<div>

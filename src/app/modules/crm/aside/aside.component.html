@@ -1,0 +1,93 @@
+
+<aside class="main-sidebar sidebar-dark-primary elevation-4">
+    <a routerLink="/crm/dashboard" class="brand-link" style="text-align: center">
+        <img src="assets/images/logo 2.png" style="height:auto;width:40%;" />
+    </a>
+    <div class="sidebar">
+        <nav class="mt-2">    
+            <app-sideloader *ngIf="loading"></app-sideloader>
+            <ul *ngIf="loading==false" class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">             
+                <li class="nav-item">
+                    <a routerLink = "/crm/dashboard" routerLinkActive="active" class="nav-link">
+                        <i class="nav-icon fas fa-th"></i>
+                        <p>
+                            Dashboard
+                        </p>
+                    </a>
+                </li>
+                <li class="nav-item" *ngIf="ShowCampaign">
+                    <a routerLink = "/crm/campaigns"  routerLinkActive="active" class="nav-link">
+                        <i class="nav-icon fa fa-bullseye"></i>
+                        <p>Campaigns</p>
+                    </a>
+                </li>
+                <li class="nav-item" *ngIf="StaffUser">
+                    <a routerLink = "/crm/members" routerLinkActive="active" class="nav-link">
+                        <i class="nav-icon fas fa-users"></i>
+                        <p>Users</p>
+                    </a>
+                </li>
+                <li class="nav-item" *ngIf="ShowLead">
+                    <a routerLink = "/crm/leads"  routerLinkActive="active" class="nav-link">
+                        <i class="nav-icon fa fa-bullhorn"></i>
+                        <p>Leads</p>
+                    </a>
+                </li>
+                <li class="nav-item" *ngIf="ShowLead">
+                    <a routerLink = "/crm/lead/success"  routerLinkActive="active" class="nav-link">
+                        <i class="nav-icon fa fa-bullhorn"></i>
+                        <p>Success Leads</p>
+                    </a>
+                </li>
+                <li class="nav-item" *ngIf="ShowTasks">
+                    <a routerLink = "/crm/tasks"  routerLinkActive="active" class="nav-link">
+                        <i class="nav-icon fa fa-tasks"></i>
+                        <p>Tasks</p>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a routerLink = "/crm/feedbacks"  routerLinkActive="active" class="nav-link">
+                        <i class="nav-icon fa fa-comments"></i>
+                        <p>Feedbacks</p>
+                    </a>
+                </li>
+                <li class="nav-item" *ngIf="ShowAccount">
+                    <a routerLink = "/crm/accounts" routerLinkActive="active" class="nav-link">
+                        <i class="nav-icon fas fa-users"></i>
+                        <p>Accounts</p>
+                    </a>
+                </li>
+                <li class="nav-item" *ngIf="ShowContact">
+                    <a routerLink = "/crm/contacts"  routerLinkActive="active"class="nav-link">
+                        <i class="nav-icon fas fa-users"></i>
+                        <p>Contacts</p>
+                    </a>
+                </li>
+                <li class="nav-item" *ngIf="ShowOpportunity">
+                    <a routerLink = "/crm/opportunities" routerLinkActive="active" class="nav-link">
+                        <i class="nav-icon fa fa-tasks"></i>
+                        <p>Opportunities</p>
+                    </a>
+                </li> 
+                <li class="nav-item" *ngIf="ShowDeals">
+                    <a routerLink = "/crm/deals"  routerLinkActive="active" class="nav-link">
+                        <i class="nav-icon fa fa-gift"></i>
+                        <p>Deals</p>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a routerLink = "/crm/meetings"  routerLinkActive="active" class="nav-link">
+                        <i class="nav-icon far fa-handshake"></i>
+                        <p>Meetings</p>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a routerLink = "/shopping/dashboard"  routerLinkActive="active" class="nav-link">
+                        <i class="nav-icon fa fa-shopping-bag"></i>
+                        <p>Shopping Dashboard</p>
+                    </a>
+                </li>
+            </ul>
+        </nav>
+    </div>
+</aside>

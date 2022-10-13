@@ -1,0 +1,74 @@
+<div class="hold-transition sidebar-mini layout-fixed mat-typography">
+    <div class="wrapper">
+        <app-navbar ></app-navbar>
+        <app-aside ></app-aside>
+        <div class="content-wrapper">
+            <div class="content-header">
+                <div class="container-fluid">
+                    <div class="row mb-2">
+                        <div class="col-sm-6">
+                            <h1 class="m-0 text-dark">Organization</h1>
+                        </div>
+                        <div class="col-sm-6">
+                            <ol class="breadcrumb float-sm-right">
+                                <li class="breadcrumb-item">
+                                    <button  type="button" class="btn btn-primary  btn-sm" data-toggle="modal" data-target="#modal-defaultorganization"><i class="fa fa-plus"></i> Create new Organization</button>
+                                </li>
+                            </ol>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <section class="content">
+                <div class="container-fluid">
+                    <div class="row">
+                        <div  *ngFor="let profile of profiles" class="col-12 col-sm-6 col-md-3">
+                            <a [routerLink]="" (click)="change(profile.organization.org_unique_id+','+profile.id+','+profile.account_type)">
+                                <div class="info-box">
+                                    <span class="info-box-icon bg-info elevation-1"><i class="fas fa-building"></i></span>
+                                    <div class="info-box-content">
+                                        <span class="info-box-text">{{profile.organization.name}}</span>
+                                        <span class="info-box-number">
+                                            {{profile.role.name}}
+                                        </span>
+                                    </div>
+                                </div>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+        <div class="modal fade" id="modal-defaultorganization">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h3 class="modal-title">Add Organization</h3>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <form role="form" [formGroup]= "AddOrganization" (ngSubmit)='orgSubmit(AddOrganization.value)'>
+                        <div class="modal-body">   
+                            <div class="card-body">
+                                <div class="form-group">
+                                    <label>Company Name</label><small class="text-danger">*</small>
+                                    <input type="text" name="email" [class.is-invalid]="AddOrganization.get('company_name')?.invalid && AddOrganization.get('company_name')?.touched" class="form-control" formControlName="company_name" placeholder="Enter Company">
+                                </div>
+                                <div class="form-group">
+                                    <label>Company Description</label><small class="text-danger">*</small>
+                                    <textarea class="form-control" rows="3"[class.is-invalid]="AddOrganization.get('company_description')?.invalid && AddOrganization.get('company_description')?.touched" formControlName="company_description" placeholder="Enter ..."></textarea>
+                                </div>
+                            </div>  
+                        </div>
+                        <div class="modal-footer justify-content-between">
+                            <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                            <button type="submit"  class="btn btn-primary">Create</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <app-footer *ngIf="loading==false"></app-footer>
+    <div>
+<div>

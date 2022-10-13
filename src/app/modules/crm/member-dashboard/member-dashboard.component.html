@@ -1,0 +1,266 @@
+<div class="wrapper">
+    <div class="card card-primary card-outline">
+        <div class="card-header">
+            <a routerLink="/crm/dashboard" mat-raised-button color="primary"><<<-- Go to Dashboard</a>
+        </div>
+        <div class="card-body">
+            <ul class="nav nav-tabs" id="custom-content-below-tab" role="tablist">
+                <li class="nav-item">
+                    <a class="nav-link active"  data-toggle="pill" routerLink="/crm/dashboard/member/{{Profileid}}/{{ProfileorgId}}/{{Profileuid}}" role="tab" aria-controls="custom-content-below-home" aria-selected="true">Home</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link"  data-toggle="pill" routerLink="/crm/leads/member/{{Profileid}}/{{ProfileorgId}}/{{Profileuid}}" role="tab" aria-controls="custom-content-below-profile" aria-selected="false">Leads</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link"  data-toggle="pill" routerLink="/crm/tasks/member/{{Profileid}}/{{ProfileorgId}}/{{Profileuid}}" role="tab" aria-controls="custom-content-below-messages" aria-selected="false">Task</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link"  data-toggle="pill" routerLink="/crm/feedbacks/member/{{Profileid}}/{{ProfileorgId}}/{{Profileuid}}" role="tab" aria-controls="custom-content-below-settings" aria-selected="false">Feedbacks</a>
+                </li>
+            </ul>
+            <div class="tab-content" id="custom-content-below-tabContent">
+                <div class="tab-pane fade show active" id="custom-content-below-home" role="tabpanel" aria-labelledby="custom-content-below-home-tab">
+                    <div class="row">
+                        <div class="col-md-3 col-sm-6 col-12">
+                            <div class="info-box">
+                                <span class="info-box-icon bg-info"><i class="fa fa-tasks" aria-hidden="true"></i></span>
+                                <div class="info-box-content">
+                                    <span class="info-box-text">Tasks</span>
+                                    <span class="info-box-number">{{totalTask}}</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-3 col-sm-6 col-12">
+                            <div class="info-box">
+                                <span class="info-box-icon bg-success"><i class="fa fa-handshake" aria-hidden="true"></i></span>
+                                <div class="info-box-content">
+                                    <span class="info-box-text">Meetings</span>
+                                    <span class="info-box-number">{{totalMeetings}}</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-3 col-sm-6 col-12">
+                            <div class="info-box">
+                                <span class="info-box-icon bg-warning"><i class="fas fa-search-dollar"></i></span>
+                                <div class="info-box-content">
+                                    <span class="info-box-text">Leads</span>
+                                    <span class="info-box-number">{{totalLead}}</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-3 col-sm-6 col-12">
+                            <div class="info-box">
+                                <span class="info-box-icon bg-danger"><i class="fa fa-comments"></i></span>
+
+                                <div class="info-box-content">
+                                    <span class="info-box-text">Feedbacks</span>
+                                    <span class="info-box-number">{{totalFeedback}}</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-4">
+                            <div class="chart">
+                                <canvas baseChart
+                                        [data]="pieChartData"
+                                        [type]="pieChartType"
+                                        [options]="pieChartOptions">
+                                </canvas>
+                            </div>
+                        </div>
+                        <div class="col-md-8">
+                            <div class="card">
+                                <div class="card-header border-transparent">
+                                    <h3 class="card-title">Open Tasks</h3>
+                                    <div class="card-tools">
+                                        <button type="button" class="btn btn-tool" data-card-widget="collapse">
+                                            <i class="fas fa-minus"></i>
+                                        </button>
+                                        <button type="button" class="btn btn-tool" data-card-widget="remove">
+                                            <i class="fas fa-times"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                                <div class="card-body p-0">
+                                    <div class="table-responsive">
+                                        <table class="table m-0">
+                                            <thead> 
+                                                <tr>
+                                                    <th scope="col">Title</th>
+                                                    <th scope="col">For</th>
+                                                    <th scope="col">Related To</th>
+                                                    <th scope="col">Status</th>
+                                                    <th scope="col">Priority</th>
+                                                    <th scope="col">Tasks Owner</th>
+                                                    <th scope="col">Due Date</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr *ngFor="let task of TaskdataSource">
+                                                    <td>{{task.title}}</td>
+                                                    <td>{{task.task_for}}</td>
+                                                    <td>{{task.related_to}}</td>
+                                                    <td>
+                                                        <span class="badge badge-warning">{{task.taskstatus.status}}</span>
+                                                    </td>
+                                                    <td>{{task.taskpriority.priority}}</td>
+                                                    <td>{{task.profile.user.name}}</td>
+                                                    <td>{{task.due_date}}</td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                        <app-test *ngIf = "totalTask<1"></app-test>
+                                    </div>
+                                </div>
+                                
+                            </div> 
+                        </div>  
+                        <div class="col-md-6">
+                            <div class="card">
+                                <div class="card-header border-transparent">
+                                    <h3 class="card-title">Meetings</h3>
+                                    <div class="card-tools">
+                                        <button type="button" class="btn btn-tool" data-card-widget="collapse">
+                                            <i class="fas fa-minus"></i>
+                                        </button>
+                                        <button type="button" class="btn btn-tool" data-card-widget="remove">
+                                            <i class="fas fa-times"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                                <div class="card-body p-0">
+                                    <div class="table-responsive">
+                                        <table class="table m-0">
+                                            <thead>                                           
+                                                <tr>
+                                                    <th scope="col">Title</th>
+                                                    <th scope="col">From</th>
+                                                    <th scope="col">To</th>
+                                                    <th scope="col">Related To</th>
+                                                </tr>                                          
+                                            </thead>
+                                            <tbody>     
+                                                <tr *ngFor="let element of MeetingDataSource">
+                                                    <td>{{element.title}}</td>
+                                                    <td>{{element.from}}</td>
+                                                    <td>{{element.to}}</td>
+                                                    <td>{{element.related_to}}</td>
+                                                </tr>                                         
+                                            </tbody>
+                                        </table>
+                                        <app-test *ngIf = "totalMeetings<1"></app-test>
+                                    </div>
+                                </div>
+                            </div> 
+                        </div>
+                        <div class="col-md-6">
+                            <div class="card">
+                                <div class="card-header border-transparent">
+                                    <h3 class="card-title">Latest Leads</h3>
+                                    <div class="card-tools">
+                                        <button type="button" class="btn btn-tool" data-card-widget="collapse">
+                                            <i class="fas fa-minus"></i>
+                                        </button>
+                                        <button type="button" class="btn btn-tool" data-card-widget="remove">
+                                            <i class="fas fa-times"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                                <div class="card-body p-0">
+                                    <div class="table-responsive">
+                                        <table class="table m-0">
+                                            <thead>                                           
+                                                <tr>
+                                                    <th scope="col">Lead</th>
+                                                    <th scope="col">Status</th>
+                                                    <th scope="col">Name</th>
+                                                    <th scope="col">Email</th>
+                                                    <th scope="col">Phone</th>
+                                                    <th scope="col">Lead Source</th>
+                                                    <th scope="col">Lead Owner</th>
+                                                    <th scope="col">Campaign</th>
+                                                </tr>                                          
+                                            </thead>
+                                            <tbody>     
+                                                   <tr *ngFor="let lead of LeaddataSource">
+                                                       <td>{{lead.title}}</td>
+                                                       <td>                                            
+                                                           <span class="badge badge-warning">{{lead.leadStatus.name}}</span>
+                                                        </td>
+                                                       <td>{{lead.first_name}}</td>
+                                                       <td>{{lead.email}}</td>
+                                                       <td>{{lead.phone}}</td>
+                                                       <td>{{lead.lead_source}}</td>
+                                                       <td>{{lead.profile.user.name}}</td>
+                                                       <td><p *ngIf="lead.camp">{{lead.camp.campaign_name}}</p></td>
+                                                   </tr>                                      
+                                            </tbody>
+                                        </table>
+                                        <app-test *ngIf = "totalLead<1"></app-test>
+                                    </div>
+                                </div>
+                            </div> 
+                        </div>
+                        <div class="col-md-6">
+                            <div class="card">
+                                <div class="card-header border-transparent">
+                                    <h3 class="card-title">Feedbacks</h3>
+                                    <div class="card-tools">
+                                        <button type="button" class="btn btn-tool" data-card-widget="collapse">
+                                            <i class="fas fa-minus"></i>
+                                        </button>
+                                        <button type="button" class="btn btn-tool" data-card-widget="remove">
+                                            <i class="fas fa-times"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                                <div class="card-body p-0">
+                                    <div class="table-responsive">
+                                        <table class="table m-0">
+                                            <thead>                                           
+                                                <tr>
+                                                    <th scope="col">Call Action</th>
+                                                    <th scope="col">Status</th>
+                                                    <th scope="col">Lead</th>
+                                                    <th scope="col">Name</th>
+                                                    <th scope="col">Phone</th>
+                                                    <th scope="col">Follow Up Date</th>
+                                                    <th scope="col">Follow Up Time</th>
+                                                </tr>                                          
+                                            </thead>
+                                            <tbody>     
+                                                   <tr *ngFor="let fd of FeedbackdataSource">
+                                                       <td>{{fd.callAction.action}}</td>
+                                                       <td>     
+                                                           <span class="badge badge-warning">{{fd.feedbackStatus.status}}</span>
+                                                        </td>
+                                                       <td>{{fd.lead.title}}</td>
+                                                       <td>{{fd.first_name}} {{fd.last_name}}</td>
+                                                       <td>{{fd.phone}}</td>
+                                                       <td>{{fd.date}}</td>
+                                                       <td>{{fd.time | slice : 0 :-10 }}</td>
+                                                   </tr>                                      
+                                            </tbody>
+                                        </table>
+                                        <app-test *ngIf = "totalFeedback<1"></app-test>
+                                    </div>
+                                </div>
+                            </div> 
+                        </div>
+                        
+                    </div>
+                </div>
+                <div class="tab-pane fade" id="custom-content-below-profile" role="tabpanel" aria-labelledby="custom-content-below-profile-tab">
+                    
+                </div>
+                <div class="tab-pane fade" id="custom-content-below-messages" role="tabpanel" aria-labelledby="custom-content-below-messages-tab">
+                    
+                </div>
+                <div class="tab-pane fade" id="custom-content-below-settings" role="tabpanel" aria-labelledby="custom-content-below-settings-tab">
+                
+                </div>
+            </div>
+        </div>
+    </div>    
+</div>

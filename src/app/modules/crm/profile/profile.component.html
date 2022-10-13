@@ -1,0 +1,160 @@
+<div class="hold-transition sidebar-mini layout-fixed mat-typography">
+<div class="wrapper">
+    <app-navbar></app-navbar>
+    <app-aside></app-aside>
+    <div class="content-wrapper">
+        <section class="content-header">
+            <div class="container-fluid">
+                <div class="row mb-2">
+                    <div class="col-sm-6">
+                        <h1>Member Profile</h1>
+                    </div>
+                    <div class="col-sm-6">
+                        <ol class="breadcrumb float-sm-right">
+                            <li class="breadcrumb-item"><a routerLink="/crm/dashboard">Home</a></li>
+                            <li class="breadcrumb-item active">User Profile</li>
+                        </ol>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <section class="content">
+            <div class="cardsloader" *ngIf="loading">
+                <div class="cardloader is-loading">
+                    <div class="content">
+                        <h2></h2>
+                    </div>
+                </div>
+            </div>
+            <div class="container-fluid" *ngIf="loading==false">
+                <div class="row"> 
+                    <div class="col-md-3">
+                        <div class="card card-primary card-outline">
+                            <div class="card-body box-profile">
+                                <div class="text-center">
+                                    <div class="user-avatar user-avatar-xl fileinput-button profile-user-img img-fluid img-circle">
+                                        <img [src]="imageSrc" alt="User Avatar">
+                                        <input id="fileupload-avatar" (change)="onfileselected($event)" type="file" name="avatar">
+                                    </div>
+                                </div>
+                                <h3 class="profile-username text-center">{{first_name}} {{last_name}}</h3>      
+                                <p class="text-muted text-center" >{{designation}} {{'('+ organization+ ')'}}</p>
+                                <p class="text-muted text-center" ></p>
+                                <ul class="list-group list-group-unbordered mb-3">
+                                    <li class="list-group-item"><b>Leads</b> <a class="float-right">0</a></li>
+                                    <li class="list-group-item"><b>Opportunity</b> <a class="float-right">0</a></li>
+                                    <li class="list-group-item"><b>Contacts</b> <a class="float-right">0</a></li>
+                                </ul>
+                                <a routerLink="/crm/permissions/{{profileType.id}}" class="btn btn-primary btn-block"><b>Permissions</b></a>
+                            </div>
+                        </div>        
+                        <div class="card card-primary">
+                            <div class="card-header">
+                                <h3 class="card-title">About Me</h3>
+                            </div>
+                            <div class="card-body">     
+                                <hr />
+                                <strong><i class="fas fa-map-marker-alt mr-1"></i> Location</strong>    
+                                <p class="text-muted">{{city}} {{country}}</p>    
+                                <hr /> 
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-9">
+                        <div class="card">
+                            
+                            <div class="card-header p-2">
+                                <ul class="nav nav-pills">
+                                    <li class="nav-item"><a class="nav-link active" href="#activity" data-toggle="tab">Activity</a></li>
+                                    <li class="nav-item"><a class="nav-link" href="#timeline" data-toggle="tab">Timeline</a></li>
+                                    <li class="nav-item"><a class="nav-link" href="#settings" data-toggle="tab">Settings</a></li>
+                                </ul>
+                            </div>
+                            <div class="card-body">
+                                <div class="tab-content">
+                                    <div class="active tab-pane" id="activity">
+                                    </div>
+                                    <div class="tab-pane" id="timeline">
+                                        <div class="timeline timeline-inverse">                                                                                                                              
+                                        </div>
+                                    </div>
+                                    <div class="tab-pane" id="settings">
+                                        <form class="form-horizontal" [formGroup]= "Accountprofile" (ngSubmit)='onSubmit(Accountprofile.value)'>
+                                            <div class="form-group row">
+                                                <label for="first_name" class="col-sm-2 col-form-label">First Name</label>
+                                                <div class="col-sm-10">
+                                                    <input type="text" class="form-control" id="first_name" formControlName = "first_name" placeholder="Name"  />
+                                                </div>
+                                            </div>
+                                            <div class="form-group row">
+                                                <label for="last_name" class="col-sm-2 col-form-label">Last Name</label>
+                                                <div class="col-sm-10">
+                                                    <input type="text" class="form-control" id="last_name" formControlName = "last_name" placeholder="Name"  />
+                                                </div>
+                                            </div>
+                                            <div class="form-group row">
+                                                <label for="inputEmail" class="col-sm-2 col-form-label">Email</label>
+                                                <div class="col-sm-10">
+                                                    <input type="email" [attr.disabled] = "true" class="form-control" id="inputEmail" placeholder="Email" formControlName="email"/>
+                                                </div>
+                                            </div>
+                                            <div class="form-group row">
+                                                <label for="phone" class="col-sm-2 col-form-label">Phone</label>
+                                                <div class="col-sm-10">
+                                                    <input type="text" class="form-control" id="phone" placeholder="Phone" formControlName = "phone" />
+                                                </div>
+                                            </div>
+                                            <div class="form-group row">
+                                                <label class="control-label col-sm-2 col-form-label" >Date of Birth</label>
+                                                <div class="col-sm-10">
+                                                    <input  type="date" formControlName = "dob" class="form-control"  style = "background-color:white"> 
+                                                </div>
+                                            </div>
+                                            <div class="form-group row">
+                                                <label for="street" class="col-sm-2 col-form-label">Street</label>
+                                                <div class="col-sm-10">
+                                                    <input type="text" class="form-control" id="street" placeholder="Street" formControlName = "street" />
+                                                </div>
+                                            </div>
+                                            <div class="form-group row">
+                                                <label for="city" class="col-sm-2 col-form-label">City</label>
+                                                <div class="col-sm-10">
+                                                    <input type="text" class="form-control" id="city" placeholder="City" formControlName = "city" />
+                                                </div>
+                                            </div>
+                                            <div class="form-group row">
+                                                <label for="state" class="col-sm-2 col-form-label">State</label>
+                                                <div class="col-sm-10">
+                                                    <input type="text" class="form-control" id="state" placeholder="State" formControlName = "state" />
+                                                </div>
+                                            </div>
+                                            <div class="form-group row">
+                                                <label for="zip" class="col-sm-2 col-form-label">Zip</label>
+                                                <div class="col-sm-10">
+                                                    <input type="text" class="form-control" id="zip" placeholder="zip" formControlName = "zip" />
+                                                </div>
+                                            </div>
+                                            <div class="form-group row">
+                                                <label for="country" class="col-sm-2 col-form-label">Country</label>
+                                                <div class="col-sm-10">
+                                                    <input type="text" class="form-control" id="country" placeholder="Country" formControlName = "country" />
+                                                </div>
+                                            </div>
+                                            <div class="form-group row">
+                                                <div class="offset-sm-2 col-sm-10">
+                                                    <button type="submit" id="updateProfile" class="btn btn-danger">Submit</button>
+                                                </div>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+    <app-footer></app-footer>
+</div>
+</div>

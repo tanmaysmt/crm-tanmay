@@ -1,0 +1,127 @@
+<div class="hold-transition sidebar-mini layout-fixed mat-typography">
+<div class="wrapper">
+    <app-navbar ></app-navbar>
+    <app-aside ></app-aside>
+    <div class="cardsloader" *ngIf="loading">
+        <div class="cardloader is-loading">
+            <div class="content">
+                <h2></h2>
+            </div>
+        </div>
+    </div>
+    <div class="content-wrapper" *ngIf="loading==false">
+        <div class="card card-primary card-outline">
+            <div class="card-body">      
+                <h4>Manage Deals</h4>
+                <ul class="nav nav-tabs" id="custom-content-below-tab" role="tablist">
+                    <li class="nav-item">
+                        <a class="nav-link" id="custom-content-below-home-tab" data-toggle="pill"
+                        routerLink="/crm/deals" role="tab" aria-controls="custom-content-below-home"
+                            aria-selected="true">Leads</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" id="custom-content-below-profile-tab" data-toggle="pill"
+                        (click)="editleads.reset()" routerLink="/crm/deal/add" href="#custom-content-below-profile" role="tab" aria-controls="custom-content-below-profile"
+                            aria-selected="true">Add New</a>
+                    </li>
+                </ul>
+                <div class="tab-content" id="custom-content-below-tabContent">
+                    <div class="tab-pane fade show active"  id="custom-content-below-home" role="tabpanel"
+                        aria-labelledby="custom-content-below-home-tab">
+                        <div class="table-responsive mb-4">
+                            <form  class="form-horizontal" role="form" [formGroup]= "editleads" (ngSubmit)='onSubmit(editleads.value)'>
+                                <div class="card-body">
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <div class="form-group row">
+                                                <label class="col-sm-3 col-form-label">Deal Name <small class="text-danger">*</small></label>
+                                                <div class="col-sm-9">
+                                                    <input type="text" [class.is-invalid]="editleads.get('DealName')?.invalid && editleads.get('DealName')?.touched" class="form-control" formControlName = "DealName" placeholder="Enter Deal Name" />
+                                                    <small [class.d-none]="editleads.get('DealName')?.valid || editleads.get('DealName')?.untouched" class="text-danger">Deal Name is Required</small>
+                                                </div>
+                                            </div>
+                                            <div class="form-group row">
+                                                <label class="col-sm-3 col-form-label">Account Name<small class="text-danger">*</small></label>
+                                                <div class="col-sm-9">
+                                                    <select class="form-control" formControlName = "AccountName">
+                                                        <option *ngFor="let src of accounts" [selected]="src.id===SAccount" value = "{{src.id}}" >{{src.first_name}}</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                            <div class="form-group row">
+                                                <label class="col-sm-3 col-form-label">lead Source <small class="text-danger">*</small></label>
+                                                <div class="col-sm-9">
+                                                    <select class="form-control" formControlName = "LeadSource">
+                                                        <option *ngFor="let src of leadSource" [selected]="src.name === SleadSource" value = "{{src.name}}" >{{src.name}}</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                            <div class="form-group row">
+                                                <label class="col-sm-3 col-form-label">Contact Name <small class="text-danger">*</small></label>
+                                                <div class="col-sm-9">
+                                                    <select class="form-control" formControlName = "ContactName">
+                                                        <option *ngFor="let src of contacts" [selected]="src.id===SContact" value = "{{src.id}}" >{{src.first_name}}</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                            <div class="form-group row">
+                                                <label class="col-sm-3 col-form-label">Amount <small class="text-danger">*</small></label>
+                                                <div class="col-sm-9">
+                                                    <input type="number"  class="form-control validatePhone" [class.is-invalid]="editleads.get('Amount')?.invalid && editleads.get('Amount')?.touched" formControlName = "Amount"  placeholder="Enter Amount" />
+                                                    <small [class.d-none]="editleads.get('Amount')?.valid || editleads.get('Amount')?.untouched" class="text-danger">Amount Can not be empty</small>
+                                                </div>
+                                            </div>
+                                            
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="form-group row">
+                                                <label class="control-label col-sm-3 col-form-label" for="flatpickr01">Closing Date</label>
+                                                <div class="col-sm-9">
+                                                    <input  type="date" formControlName = "ClosingDate" class="form-control"> 
+                                                </div>
+                                            </div>
+                                            <div class="form-group row">
+                                                <label class="col-sm-3 col-form-label">Stage  <small class="text-danger">*</small></label>
+                                                <div class="col-sm-9">
+                                                    <select class="form-control" formControlName = "Stage">
+                                                        <option *ngFor="let src of DealStatus" [selected]="src.id===SDealStatus" value = "{{src.id}}" >{{src.name}}</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                            <div class="form-group row">
+                                                <label class="col-sm-3 col-form-label">Probability</label>
+                                                <div class="col-sm-9">
+                                                    <input type="number" class="form-control" maxlength="3"  min="0" 
+                                                    max="100"  formControlName = "Probability"  />
+                                                </div>
+                                            </div>
+                                            <div class="form-group row">
+                                                <label class="col-sm-3 col-form-label">Expected Revenue</label>
+                                                <div class="col-sm-9">
+                                                    <input type="number" class="form-control"   formControlName = "ExpectedRevenue"  placeholder="$.."/>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <div class="form-group">
+                                                <label>Description</label>
+                                                <textarea class="form-control" rows="3" formControlName = "Description" placeholder="Enter ..."></textarea>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="card-footer">
+                                    <button type="submit" class="btn btn-primary">Save Changes</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <app-footer *ngIf="loading==false"></app-footer>
+<div>
+<div>

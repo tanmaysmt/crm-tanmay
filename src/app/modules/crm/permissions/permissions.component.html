@@ -1,0 +1,178 @@
+<div class="hold-transition sidebar-mini layout-fixed mat-typography">
+<div class="wrapper">
+    <app-navbar ></app-navbar>
+    <app-aside ></app-aside>
+    <div class="content-wrapper">
+        <div class="content-header">
+            <div class="container-fluid">
+                <div class="row mb-2">
+                    <div class="col-sm-6">
+                        <h1 class="m-0 text-dark">Permissions</h1>
+                    </div> 
+                    <div class="col-sm-6">
+                        <ol class="breadcrumb float-sm-right">
+                            <li class="breadcrumb-item"><button  type="button" class="btn btn-warning   btn-sm m-2" (click)="back()"><i class="fa fa-reply" aria-hidden="true"></i> Back</button></li>
+                        </ol>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <section class="content">
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-md-9">
+                        <div class="card">
+                            <div class="card-body">
+                                <div *ngIf="loading">
+                                    <div class="loader"></div>
+                                </div>
+                                <form class="form-horizontal" [formGroup]= "ChangePermissions" (ngSubmit)='onSubmit(ChangePermissions.value)'>
+                                    <div class="form-group row">
+                                        <label for="first_name" class="col-sm-2 col-form-label">Leads</label>
+                                        <div class="col-sm-10">
+                                            <ng-multiselect-dropdown formControlName="leads" [(ngModel)]="leads"
+                                                [placeholder]="'Select Permissions'" 
+                                                [settings]="dropdownSettings"
+                                                [data]="permissions"
+                                                (onSelect)="onItemSelect($event)"
+                                            >
+                                            </ng-multiselect-dropdown>
+                                        </div>
+                                    </div>
+                                    <div class="form-group row">
+                                        <label for="last_name" class="col-sm-2 col-form-label">Contacts</label>
+                                        <div class="col-sm-10">
+                                            <ng-multiselect-dropdown formControlName="contacts" [(ngModel)]="contacts"
+                                                [placeholder]="'Select Permissions'" 
+                                                [settings]="dropdownSettings"
+                                                [data]="permissions"
+                                                (onSelect)="onItemSelect($event)"
+                                            >
+                                            </ng-multiselect-dropdown>
+                                        </div>
+                                    </div>
+                                    <div class="form-group row">
+                                        <label for="last_name" class="col-sm-2 col-form-label">Opportunity</label>
+                                        <div class="col-sm-10">
+                                            <ng-multiselect-dropdown formControlName="opportunity" [(ngModel)]="opportunity"
+                                                [placeholder]="'Select Permissions'" 
+                                                [settings]="dropdownSettings"
+                                                [data]="permissions"
+                                                (onSelect)="onItemSelect($event)"
+                                            >
+                                            </ng-multiselect-dropdown>
+                                        </div>
+                                    </div>
+                                    <div class="form-group row">
+                                        <label for="last_name" class="col-sm-2 col-form-label">Accounts</label>
+                                        <div class="col-sm-10">
+                                            <ng-multiselect-dropdown formControlName="account" [(ngModel)]="account"
+                                                [placeholder]="'Select Permissions'" 
+                                                [settings]="dropdownSettings"
+                                                [data]="permissions"
+                                                (onSelect)="onItemSelect($event)"
+                                            >
+                                            </ng-multiselect-dropdown>
+                                        </div>
+                                    </div>
+                                    <div class="form-group row">
+                                        <label for="last_name" class="col-sm-2 col-form-label">Deals</label>
+                                        <div class="col-sm-10">
+                                            <ng-multiselect-dropdown formControlName="deals" [(ngModel)]="deals"
+                                                [placeholder]="'Select Permissions'" 
+                                                [settings]="dropdownSettings"
+                                                [data]="permissions"
+                                                (onSelect)="onItemSelect($event)"
+                                            >
+                                            </ng-multiselect-dropdown>
+                                        </div>
+                                    </div>
+                                    <div class="form-group row">
+                                        <label for="last_name" class="col-sm-2 col-form-label">Tasks</label>
+                                        <div class="col-sm-10"> 
+                                            <ng-multiselect-dropdown formControlName="tasks"  [(ngModel)]="tasks"
+                                                [placeholder]="'Select Permissions'" 
+                                                [settings]="dropdownSettings"
+                                                [data]="permissions"
+                                                (onSelect)="onItemSelect($event)"
+                                            >
+                                            </ng-multiselect-dropdown>
+                                        </div>
+                                    </div>
+                                    <div class="form-group row">
+                                        <label for="last_name" class="col-sm-2 col-form-label">Meetings</label>
+                                        <div class="col-sm-10">
+                                            <ng-multiselect-dropdown formControlName="meetings" [(ngModel)]="meetings"
+                                                [placeholder]="'Select Permissions'" 
+                                                [settings]="dropdownSettings"
+                                                [data]="permissions"
+                                                (onSelect)="onItemSelect($event)"
+                                            >
+                                            </ng-multiselect-dropdown>
+                                        </div>
+                                    </div>
+                                    <div class="form-group row">
+                                        <label for="last_name" class="col-sm-2 col-form-label">Calls</label>
+                                        <div class="col-sm-10">
+                                            <ng-multiselect-dropdown formControlName="calls" [(ngModel)]="calls"
+                                                [placeholder]="'Select Permissions'" 
+                                                [settings]="dropdownSettings"
+                                                [data]="permissions"
+                                                (onSelect)="onItemSelect($event)"
+                                            >
+                                            </ng-multiselect-dropdown>
+                                        </div>
+                                    </div>
+                                    <div class="form-group row">
+                                        <label for="last_name" class="col-sm-2 col-form-label">Reports</label>
+                                        <div class="col-sm-10">
+                                            
+                                            <ng-multiselect-dropdown formControlName="reports" [(ngModel)]="reports"
+                                                [placeholder]="'Select Permissions'" 
+                                                [settings]="dropdownSettings"
+                                                [data]="permissions"
+                                                (onSelect)="onItemSelect($event)"
+                                            >
+                                            </ng-multiselect-dropdown>
+                                        </div>
+                                    </div>
+                                    <div class="form-group row">
+                                        <label for="last_name" class="col-sm-2 col-form-label">Campaigns</label>
+                                        <div class="col-sm-10">
+                                            <ng-multiselect-dropdown formControlName="campaigns" [(ngModel)]="campaigns"
+                                                [placeholder]="'Select Permissions'" 
+                                                [settings]="dropdownSettings"
+                                                [data]="permissions"
+                                                (onSelect)="onItemSelect($event)"
+                                            >
+                                            </ng-multiselect-dropdown>
+                                        </div>
+                                    </div>
+                                    <div class="form-group row">
+                                        <label for="last_name" class="col-sm-2 col-form-label">Users</label>
+                                        <div class="col-sm-10">
+                                            <ng-multiselect-dropdown formControlName="users" [(ngModel)]="users"
+                                                [placeholder]="'Select Permissions'" 
+                                                [settings]="dropdownSettings"
+                                                [data]="permissions"
+                                                (onSelect)="onItemSelect($event)"
+                                            >
+                                            </ng-multiselect-dropdown>
+                                        </div>
+                                    </div>
+                                    <div class="form-group row">
+                                        <div class="offset-sm-2 col-sm-10">
+                                            <button type="submit" class="btn btn-primary">Save Changes</button>
+                                        </div>
+                                        </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div> 
+        </section>
+    </div>
+    <app-footer></app-footer>
+<div>
+<div>

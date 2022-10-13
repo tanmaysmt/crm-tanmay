@@ -1,0 +1,41 @@
+.user-avatar {
+    position: relative;
+    margin-bottom: 0;
+    display: inline-block;
+    width: 2rem;
+    height: 2rem;
+    font-size: 2rem;
+    border-radius: 4rem;
+    background-color: #fff;
+    vertical-align: middle;
+}
+.fileinput-button, .fileinput-dropzone {
+    position: relative;
+    overflow: hidden;
+    display: inline-block;
+}
+.user-avatar-xl {
+    width: 5rem;
+    height: 5rem;
+    font-size: 5rem;
+}
+.fileinput-button input, .fileinput-dropzone input {
+    position: absolute;
+    top: 0;
+    left: 0;
+    margin: 0;
+    width: 100%;
+    height: 100%;
+    opacity: 0;
+    direction: ltr;
+    cursor: pointer;
+    z-index: 2;
+}
+.user-avatar img, .user-avatar video {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    border-radius: 4rem;
+}

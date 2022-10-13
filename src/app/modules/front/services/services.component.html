@@ -1,0 +1,47 @@
+<app-header></app-header>
+<app-box-loader *ngIf="showloader"></app-box-loader>
+<section class="overview-area ptb-100" *ngIf="showloader==false">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-lg-6">
+                <div class="row align-items-center">
+                    <div class="col-lg-6">
+                        <div class="overview-image">
+                            <img src="assets/assets/img/image1.png" alt="image" />
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="overview-content">
+                            <h2>CRM</h2>
+                            <p>Customer relationship management (CRM) is a process in which a business or other organization administers its interactions with customers, typically using data analysis to study large amounts of information.</p>
+                            <a routerLink="/crm/dashboard" class="btn-one">
+                                Access
+                                <i class="bx bx-right-arrow-alt"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <div class="row align-items-center">
+                    <div class="col-lg-6">
+                        <div class="overview-image">
+                            <img src="assets/assets/img/image2.png" alt="image" />
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="overview-content">
+                            <h2>Shopping</h2>
+                            <p>A store is a retail establishment offering a wide range of consumer goods in different areas of the store, each area ("department") specializing in a product category.</p>
+                            <a routerLink="/shopping/dashboard" class="btn-two">
+                                Access
+                                <i class="bx bx-right-arrow-alt"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<app-footer></app-footer>

@@ -1,0 +1,94 @@
+<div class="Rwrapper" *ngIf="Rloading">
+    <div class="card-loader card-loader--tabs"></div>
+</div>
+<nav class="main-header navbar navbar-expand navbar-white navbar-light" *ngIf="Rloading==false">
+    <ul class="navbar-nav">
+        <li class="nav-item">
+          <a class="nav-link" data-widget="pushmenu" href="#" role="button"><i class="fas fa-bars"></i></a>
+        </li>
+    </ul>
+    <form class="form-inline ml-3"> 
+        <div class="input-group input-group-sm">
+            <input class="form-control form-control-navbar" type="search" placeholder="Search" aria-label="Search" />
+            <div class="input-group-append">
+                <button class="btn btn-navbar" type="submit">
+                    <i class="fas fa-search"></i>
+                </button>
+            </div>
+        </div>
+    </form>
+    <div class="input-group ml-3 mt-2">
+        <div class="input-group-prepend">
+            <button type="button" class="btn btn-warning dropdown-toggle" data-toggle="dropdown">
+                Action
+            </button>
+            <ul class="dropdown-menu">
+                <li class="dropdown-item"><a routerLink="/crm/organizations">Manage</a></li>
+            </ul>
+        </div>
+        <form action="" [formGroup]= "changeOrganization">
+            <select class="form-control" style="width: 200px;" formControlName="profile_id" (change)="ChangeOrganization(changeOrganization.value)">
+                <option  *ngFor= "let profile of profiles" value="{{profile.organization.org_unique_id+','+profile.id+','+profile.account_type}}">{{profile.organization.name}}</option>
+            </select>
+        </form>
+    </div>
+    <ul class="navbar-nav ml-auto">
+        <li class="nav-item dropdown show">
+            <a class="nav-link" data-toggle="dropdown" routerLink="/crm/order-history" aria-expanded="true">
+                <img src="assets/images/fadiamond.png" style="height: 20px;" alt="">
+            </a>
+        </li>
+        <li class="nav-item dropdown">
+            <a class="nav-link" data-toggle="dropdown" routerLink="/crm/notifications/{{uId}}">
+                <img src="assets/images/bell-solid.svg" style="height: 20px;" alt="">
+                <span class="badge badge-warning navbar-badge"></span>
+            </a>
+            <!-- <div class="dropdown-menu dropdown-menu-lg dropdown-menu-right">
+                <span class="dropdown-item dropdown-header">15 Notifications</span>
+                <div class="dropdown-divider"></div>
+                <a href="#" class="dropdown-item">
+                    <i class="fas fa-envelope mr-2"></i> 4 new messages
+                    <span class="float-right text-muted text-sm">3 mins</span>
+                </a>
+                <div class="dropdown-divider"></div>
+                <a href="#" class="dropdown-item">
+                    <i class="fas fa-users mr-2"></i> 8 friend requests
+                    <span class="float-right text-muted text-sm">12 hours</span>
+                </a>
+                <div class="dropdown-divider"></div>
+                <a href="#" class="dropdown-item">
+                    <i class="fas fa-file mr-2"></i> 3 new reports
+                    <span class="float-right text-muted text-sm">2 days</span>
+                </a>
+                <div class="dropdown-divider"></div>
+                <a routerLink="/crm/notifications/{{uId}}" class="dropdown-item dropdown-footer">See All Notifications</a>
+            </div> -->
+        </li>        
+        <li class="nav-item dropdown show">
+            <a class="nav-link" data-toggle="dropdown" href="#" aria-expanded="true">
+                <img [src]="imageSrc" class="mr-3 img-circle" alt="" style="width: 35px; height: 35px;">
+            </a>
+            <div class="dropdown-menu dropdown-menu-lg dropdown-menu-right" style="left: inherit; right: 0px;">
+                <a routerLink="/crm/account" class="dropdown-item">
+                    <div class="media">
+                      <img [src]="imageSrc" alt="User Avatar" class="img-size-50 mr-3 img-circle">
+                      <div class="media-body">
+                        <h3 class="dropdown-item-title">
+                          {{first_name}}
+                          <span class="float-right text-sm text-danger"></span>
+                        </h3>
+                        <p class="text-sm text-muted">{{role}}</p>
+                      </div>
+                    </div>
+                  </a>
+                <a routerLink="/crm/account" class="dropdown-item">
+                    <i class="fa fa-user mr-2"></i>My Account
+                </a>
+                <div class="dropdown-divider"></div>
+                <button class="dropdown-item" (click)="logout()">
+                    <i class="fa fa-sign-out" aria-hidden="true"></i> Logout
+                </button>
+            </div>
+        </li>
+    </ul>
+</nav>

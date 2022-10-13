@@ -1,0 +1,150 @@
+<app-header></app-header>
+<app-box-loader *ngIf="cardloading"></app-box-loader>
+<section class="pricing-area pt-100 pb-70" *ngIf="showtopups">
+    <div class="container" *ngIf="cardloading==false">
+        <div class="section-title">
+            <span>CRM Pricing</span>
+            <h2>Building Great Customer</h2>
+            <ul class="pricing-plan">
+                <li>
+                    <i class="bx bx-check"></i>
+                    Cancel or switch plans anytime
+                </li>
+                <li>
+                    <i class="bx bx-check"></i>
+                    Flexible free trial
+                </li>
+            </ul>
+        </div>
+        <ul class="nav nav-tabs centre" id="custom-content-above-tab" role="tablist">
+            <li class="nav-item">
+                <a class="nav-link active" id="custom-content-above-home-tab" data-toggle="pill" href="#custom-content-above-home" role="tab" aria-controls="custom-content-above-home" aria-selected="true">Packages</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" id="custom-content-above-Topup-tab" data-toggle="pill" href="#custom-content-above-Topup" role="tab" aria-controls="custom-content-above-Topup" aria-selected="false">Topup</a>
+            </li> 
+        </ul>
+        <div class="tab-content" id="custom-content-above-tabContent">
+            <div class="tab-pane fade show active" id="custom-content-above-home" role="tabpanel" aria-labelledby="custom-content-above-home-tab">
+                <div id="generic_price_table">
+                    <section>
+                        <div class="container">
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="price-heading clearfix"> 
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="container">
+                            <div class="row" > <!-- *ngIf="showtopup==false" -->
+                                <div class="col-lg-3 col-md-6" *ngFor="let mpackage of packages.package">
+                                    <div class="single-pricing-table">
+                                        <div class="pricing-header">
+                                            <h3>{{mpackage.title}}</h3>
+                                        </div>
+                                        <div class="price">
+                                            <sup>₹</sup>{{mpackage.amount}}
+                                            <p>/{{mpackage.duration}} Days</p>
+                                        </div>
+                                        <div class="text">Everything in <b>{{mpackage.title}}+</b></div>
+                                        <ul class="pricing-features">
+                                            <li *ngFor="let srvc of mpackage.services">
+                                                <i class="bx bx-right-arrow-alt"></i>
+                                                {{srvc.service_name}} ({{srvc.quantity}})
+                                                <span class="tooltips bx bxs-info-circle" data-bs-toggle="tooltip" data-placement="right" title="Advanced BI - bundled with Zoho Analytics"></span>
+                                            </li>
+                                        </ul>
+                                        <div class="pricing-btn">
+                                            <button class="default-btn" (click)="CheckPackage(mpackage.uid)">
+                                                Start Now
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+                </div>
+            </div>
+            <div class="tab-pane fade" id="custom-content-above-Topup" role="tabpanel" aria-labelledby="custom-content-above-Topup-tab">
+                <div class="row" *ngIf="showtopup">
+                    <div class="col-lg-3 col-md-6" *ngFor="let mtopups of packages.topups">
+                        <div class="single-pricing-table" style="background-color: moccasin;">
+                            <div class="pricing-header">
+                                <h3>{{mtopups.title}}</h3>
+                            </div>
+                            <div class="price">
+                                <sup>₹</sup>{{mtopups.amount}}
+                            </div>
+                            <ul class="pricing-features">
+                                <li *ngFor="let srvc of mtopups.services">
+                                    <i class="bx bx-right-arrow-alt"></i>
+                                    {{srvc.service_name}} ({{srvc.quantity}})
+                                    <span class="tooltips bx bxs-info-circle" data-bs-toggle="tooltip" data-placement="right" title="Advanced BI - bundled with Zoho Analytics"></span>
+                                </li>
+                            </ul>
+                            <div class="pricing-btn">
+                                <button class="default-btn" (click)="purchaseTopup(mtopups.uid)">
+                                    Buy Now
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row" *ngIf="showtopup==false">
+                    <h4>There is no Topup Available At this moment.</h4>  
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<section class="accompany-area ptb-100" *ngIf="showOrganization">
+    <div class="container">
+        <div class="section-title">
+            <h2>Select Organizations</h2>
+        </div>
+        <div class="tab accompany-list-tab">
+            <ul class="tabs">
+                <li *ngFor="let org of Uprofiles">
+                    <a [routerLink]="" (click)="selectOrg(org.id,org.organization.org_unique_id)">
+                        <img src="assets/assets/img/modern-house.png" alt="image" />
+                        <span>{{org.organization.name}}</span>
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</section>
+<app-footer></app-footer>
+
+<div class="modal fade" id="modal-Confirmation">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Confirmation</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form role="form">
+                    <div class="card-body">
+                        <p>Your Current Package is not Expired Yet. If You Purchase this Package all services of the current will be disabled.</p>
+                        <div class="form-group row">
+                            <div class="offset-sm-2 col-sm-10">
+                              <div class="form-check">
+                                <input type="checkbox" class="form-check-input" [(ngModel)]="AcceptTerms" id="exampleCheck2" [ngModelOptions]="{standalone: true}">
+                                <label class="form-check-label" for="exampleCheck2"><span (click)="acceptTerms()">Accept Our Terms & Conditions</span></label>
+                              </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-footer">
+                        <button type="button" (click)="AcceptTermsandCondition()" class="btn btn-primary float-right">Accept</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

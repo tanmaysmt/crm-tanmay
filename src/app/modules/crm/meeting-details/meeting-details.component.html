@@ -1,0 +1,183 @@
+<div class="wrapper">
+    <app-navbar ></app-navbar>
+    <app-aside ></app-aside>
+    <div class="content-wrapper kanban">
+        <section class="content-header">
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-sm-6">
+                        <h1>Meeting</h1>
+                    </div>
+                    <div class="col-sm-6 d-none d-sm-block" >
+                        <ol class="breadcrumb float-sm-right">
+                            <li ><a routerLink="/crm/meetings/{{meeting_id}}"  class="btn btn-block btn-default">Edit</a></li>
+                            <li class="breadcrumb-item"><button type="button" (click)="openDialogBox()" class="btn btn-block btn-primary ml-1" data-toggle="modal" data-target="#addParticipants">Add Participants</button></li>
+                        </ol>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <section class="content">
+            <div class="cardsloader" *ngIf="loading">
+                <div class="cardloader is-loading">
+                    <div class="content">
+                        <h2></h2>
+                    </div>
+                </div>
+            </div>
+            <div class="container-fluid" *ngIf="loading==false">
+                <div class="card card-default color-palette-box">
+                    <div class="card-header">
+                        <h3 class="card-title">
+                            <i style="font-size:24px" class="fa">&#xf073;</i>
+                            {{meeting.title}} | 
+                            Host : {{user.name}}
+                        </h3>
+                    </div> 
+                </div>
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="card">
+                            <div class="card-header">
+                                <h3 class="card-title">
+                                    <i class="fa">&#xf073;</i>
+                                    From : {{meeting.from | date:'mediumDate'}} , 
+                                    <i class="fa fa-clock"></i>
+                                    {{meeting.from | date:'shortTime'}}      
+                                </h3>
+                            </div>
+                            <div class="card-header">
+                                <h3 class="card-title">
+                                    <i class="fa">&#xf073;</i>
+                                    To : {{meeting.to | date:'mediumDate'}} , 
+                                    <i class="fa fa-clock"></i>
+                                    {{meeting.to | date:'shortTime'}}      
+                                </h3>
+                            </div>
+                            <div class="card-header">
+                                <h3 class="card-title">
+                                    <i class="fa fa-map-marker"></i>     
+                                    {{meeting.location}}   
+                                </h3>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-12">
+                        <div class="card">
+                            <div class="card-header">
+                                <div class="row">
+                                    <div class="col-sm-6">
+                                        <h3 class="m-0 text-dark">Participants</h3>
+                                    </div> 
+                                    <div class="col-sm-6">
+                                        <ol class="breadcrumb float-sm-right">
+                                            <li class="breadcrumb-item"><button type="button" (click)="openDialogBox()" class="btn btn-block btn-outline-primary btn-sm" data-toggle="modal" data-target="#addParticipants">Add Participants</button></li>
+                                        </ol>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="card-body table-responsive p-0">
+                                <table class="table table-hover text-nowrap">
+                                  <thead>
+                                    <tr>
+                                        <th>Name</th>
+                                        <th>Email</th>
+                                        <th>Phone</th>
+                                        <th>Action</th>
+                                    </tr>
+                                  </thead>
+                                  <tbody>
+                                    <tr *ngFor="let patc of participants">
+                                        <td>
+                                            <span *ngIf="patc.type=='lead'">{{patc.lead.first_name}} {{patc.lead.last_name}}</span>
+                                            <span *ngIf="patc.type=='contact'">{{patc.contact.first_name}} {{patc.contact.last_name}}</span>
+                                            <span *ngIf="patc.type=='user'">{{patc.user.user.name}}</span>
+                                        </td>
+                                        <td>
+                                            <span *ngIf="patc.type=='lead'">{{patc.lead.email}} </span>
+                                            <span *ngIf="patc.type=='contact'">{{patc.contact.email}}</span>
+                                            <span *ngIf="patc.type=='user'">{{patc.user.user.email}}</span>
+                                        </td>
+                                        <td>
+                                            <span *ngIf="patc.type=='lead'">{{patc.lead.phone}}</span>
+                                            <span *ngIf="patc.type=='contact'">{{patc.contact.phone}}</span>
+                                            <span *ngIf="patc.type=='user'">{{patc.user.user.phone}}</span>
+                                        </td>
+                                        <td>
+                                            <button class="btn btn-danger btn-sm" (click)="removeParticipants(patc.id)"><i class="fas fa-trash" style="font-size: 13px;"></i></button>
+                                        </td>
+                                    </tr>
+                                  </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+    <app-footer *ngIf="loading==false"></app-footer>
+<div>
+<div class="modal fade" id="addParticipants">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Select</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="card">
+                    <form  class="form-horizontal" role="form">
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="form-group row">
+                                        <label class="col-sm-3 col-form-label">Select Participants</label>
+                                        <div class="col-sm-6">
+                                            <select class="form-control" (change)="SelectParticipants($event);">
+                                                <option value="">Select</option>
+                                                <option value="contact">contact</option>
+                                                <option value="lead">lead</option>
+                                                <option value="user">user</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </form> 
+                    <table  mat-table [dataSource]="dataSource" matSort (matSortChange)="announceSortChange($event)" style ="width: 100%;">
+                        <ng-container matColumnDef="id">
+                            <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by first_name">select</th>
+                            <td mat-cell *matCellDef="let element">
+                                <input type="checkbox" name="lead_id" id="{{element.id}}" (change)="selectLead($event)"> 
+                            </td>
+                        </ng-container>    
+                        <ng-container matColumnDef="name">
+                            <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by email">Email</th>
+                            <td mat-cell *matCellDef="let element">
+                                <div *ngIf="lead_type=='lead'">
+                                    {{element.email}} ({{element.first_name}} {{element.last_name}})
+                                </div>
+                                <div *ngIf="lead_type=='contact'">
+                                    {{element.email}} ({{element.first_name}} {{element.last_name}})
+                                </div>
+                                <div *ngIf="lead_type=='user'">
+                                    {{element.user.email}} ({{element.user.name}})
+                                </div>
+                            </td>
+                        </ng-container>
+                        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+                    </table>
+                    <div class="card-footer">
+                        <button type="button" class="btn btn-primary float-sm-right ml-1" (click)="addParticipants()">Add</button>
+                        <button type="button" class="btn btn-default float-sm-right" data-dismiss="modal" aria-label="Close">Cancel</button>
+                    </div>          
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

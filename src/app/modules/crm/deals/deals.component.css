@@ -1,0 +1,112 @@
+.content-wrapper.kanban {
+    height: 1px;
+}
+.content-wrapper.kanban .content {
+    height: 100%;
+    overflow-x: auto;
+    overflow-y: hidden;
+}
+.content-wrapper.kanban .content .container,
+.content-wrapper.kanban .content .container-fluid,
+.content-wrapper.kanban .content .container-lg,
+.content-wrapper.kanban .content .container-md,
+.content-wrapper.kanban .content .container-sm,
+.content-wrapper.kanban .content .container-xl {
+    width: -webkit-max-content;
+    width: -moz-max-content;
+    width: max-content;
+    display: -webkit-flex;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-align-items: stretch;
+    -ms-flex-align: stretch;
+    align-items: stretch;
+}
+.content-wrapper.kanban .content-header + .content {
+    height: calc(100% - ((2 * 15px) + (1.8rem * 1.2)));
+}
+.content-wrapper.kanban .card .card-body {
+    padding: 0.5rem;
+}
+.content-wrapper.kanban .card.card-row {
+    width: 340px;
+    display: inline-block;
+    margin: 0 0.5rem;
+}
+.content-wrapper.kanban .card.card-row:first-child {
+    margin-left: 0;
+}
+.content-wrapper.kanban .card.card-row .card-body {
+    height: calc(100% - (12px + (1.8rem * 1.2) + 0.5rem));
+    overflow-y: auto;
+}
+.content-wrapper.kanban .card.card-row .card:last-child {
+    margin-bottom: 0;
+    border-bottom-width: 1px;
+}
+.content-wrapper.kanban .card.card-row .card .card-header {
+    padding: 0.5rem 0.75rem;
+}
+.content-wrapper.kanban .card.card-row .card .card-body {
+    padding: 0.75rem;
+}
+.content-wrapper.kanban .btn-tool.btn-link {
+    text-decoration: underline;
+    padding-left: 0;
+    padding-right: 0;
+}
+
+.example-container {
+    width: 400px;
+    max-width: 100%;
+    margin: 0 25px 25px 0;
+    display: inline-block;
+    vertical-align: top;
+  }
+  
+  .example-list {
+    border: solid 1px #ccc;
+    min-height: 60px;
+    background: white;
+    border-radius: 4px;
+    overflow: hidden;
+    display: block;
+  }
+  
+  .example-box {
+    padding: 20px 10px;
+    border-bottom: solid 1px #ccc;
+    color: rgba(0, 0, 0, 0.87);
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    box-sizing: border-box;
+    cursor: move;
+    background: white;
+    font-size: 14px;
+  }
+  
+  .cdk-drag-preview {
+    box-sizing: border-box;
+    border-radius: 4px;
+    box-shadow: 0 5px 5px -3px rgba(0, 0, 0, 0.2),
+                0 8px 10px 1px rgba(0, 0, 0, 0.14),
+                0 3px 14px 2px rgba(0, 0, 0, 0.12);
+  }
+  
+  .cdk-drag-placeholder {
+    opacity: 0;
+  }
+  
+  .cdk-drag-animating {
+    transition: transform 250ms cubic-bezier(0, 0, 0.2, 1);
+  }
+  
+  .example-box:last-child {
+    border: none;
+  }
+  
+  .example-list.cdk-drop-list-dragging .example-box:not(.cdk-drag-placeholder) {
+    transition: transform 250ms cubic-bezier(0, 0, 0.2, 1);
+  }

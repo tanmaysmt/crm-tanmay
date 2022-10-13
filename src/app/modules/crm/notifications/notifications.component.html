@@ -1,0 +1,25 @@
+<div class="wrapper">
+    <app-navbar ></app-navbar>
+    <app-aside ></app-aside>
+    <div class="content-wrapper">
+        <div class="card card-primary card-outline">
+            <div class="card-body">
+                <div class="row mb-2">
+                    <div class="col-sm-6">
+                        <h1 class="m-0 text-dark">Notifications</h1>
+                    </div> 
+                </div>
+                <div class="tab-pane active" id="timeline" *ngIf="notification.length > 0">
+                    <div class="timeline-item">
+                        <div *ngFor="let not of notification" class="callout callout-success" style="width: 600px">
+                            <div (click)="navigate(not)">
+                                <h5>{{not.title}}</h5>
+                                <p>{{not.description}}</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

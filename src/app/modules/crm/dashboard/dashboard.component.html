@@ -1,0 +1,221 @@
+<div class="wrapper">
+    <app-navbar (permissions)="receiveMessage($event)" (userinfo)="receiveUserInfo($event)"></app-navbar>
+    <app-aside></app-aside>
+    <div class="cardsloader" *ngIf="loading">
+        <div class="cardloader is-loading">
+            <div class="content">
+                <h2></h2>
+            </div>
+        </div>
+    </div>                    
+    <div class="content-wrapper" *ngIf="loading==false">
+        <div class="content-header">
+            <div class="container-fluid">
+                <div class="row mb-2">
+                    <div class="col-sm-3">
+                        <h1 class="m-0 text-dark">Dashboard</h1>
+                    </div> 
+                    <div class="col-sm-6" [innerHTML]="alertBox">
+                        
+                    </div>
+                    <div class="col-sm-3">
+                        <ol class="breadcrumb float-sm-right">
+                            <li class="breadcrumb-item"><a routerLink="/crm/dashboard">Home</a></li>
+                            <li class="breadcrumb-item active">Dashboard</li>
+                        </ol>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <section class="content">
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-lg-3 col-6">
+                        <div class="small-box bg-info">
+                            <div class="inner">
+                                <h3>{{total_leads}}</h3>
+                                <p>Total Leads </p>
+                            </div>
+                            <div class="icon">
+                                <i class="ion fa fa-bullhorn"></i>
+                            </div>
+                            <a [routerLink]="ShowLead ? '/crm/leads' : null" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
+                        </div>
+                    </div>
+                    <div class="col-lg-3 col-6">
+                        <div class="small-box bg-success">
+                            <div class="inner">
+                                <h3>{{total_account}}</h3>
+                                <p>Total Accounts</p>
+                            </div>
+                            <div class="icon">
+                                <i class="ion fa fa-user"></i>
+                            </div>
+                            <a [routerLink]="ShowAccount ? '/crm/accounts' : null" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
+                        </div>
+                    </div>
+                    <div class="col-lg-3 col-6">
+                        <div class="small-box bg-warning">
+                            <div class="inner">
+                                <h3>{{total_contact}}</h3>
+                                <p>Total Contacts</p>
+                            </div>
+                            <div class="icon">
+                                <i class="ion fa fa-address-book"></i>
+                            </div>
+                            <a [routerLink]="ShowContact ? '/crm/contacts' : null"  class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
+                        </div>
+                    </div>
+                    <div class="col-lg-3 col-6">
+                        <div class="small-box bg-danger">
+                            <div class="inner">
+                                <h3>{{total_opportunity}}</h3>
+                                <p>Total Opportunities</p>
+                            </div>
+                            <div class="icon">
+                                <i class="ion fa fa-tasks"></i>
+                            </div>
+                            <a [routerLink]="ShowOpportunity ? '/crm/opportunities' : null"  class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-4">
+                        <div class="chart">
+                            <canvas baseChart
+                                    [data]="pieChartData"
+                                    [type]="pieChartType"
+                                    [options]="pieChartOptions">
+                            </canvas>
+                        </div>
+                    </div>
+                    <div class="col-md-8">
+                        <div style="display: block">
+                          <canvas baseChart [data]="barChartData" [options]="barChartOptions"
+                            [type]="barChartType" (chartHover)="chartHovered($event)"
+                            (chartClick)="chartClicked($event)"></canvas>
+                        </div>
+                        <button mat-button mat-raised-button color="primary" (click)="randomize()">Update</button>
+                      </div>
+                    <div class="col-md-6">
+                        <div class="card">
+                            <div class="card-header border-transparent">
+                                <h3 class="card-title">Latest Opportunities</h3>
+                                <div class="card-tools">
+                                    <button type="button" class="btn btn-tool" data-card-widget="collapse">
+                                        <i class="fas fa-minus"></i>
+                                    </button>
+                                    <button type="button" class="btn btn-tool" data-card-widget="remove">
+                                        <i class="fas fa-times"></i>
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="card-body p-0">
+                                <div class="table-responsive">
+                                    <table class="table m-0">
+                                        <thead>
+                                            <tr>
+                                                <th scope="col">Name</th>
+                                                <th scope="col">Company</th>
+                                                <th scope="col">Email</th>
+                                                <th scope="col">Phone</th>
+                                                <th scope="col">Lead Source</th>
+                                                <th scope="col">Lead Owner</th>
+                                                <th style="width: 80px; min-width: 80px;">Action</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr *ngFor = "let lead of opportunity">                           
+                                                <td>
+                                                    <a href="#" class="text-body">{{lead.first_name}}</a>
+                                                </td>
+                                                <td>{{lead.company}}</td>
+                                                <td>{{lead.email}}</td>
+                                                <td>{{lead.phone}}</td>
+                                                <td>{{lead.lead_source}}</td>
+                                                <td>{{lead.profile.user.name}}</td>
+                                                <td>
+                                                    <div class="btn-group btn-group-sm">
+                                                        <a routerLink="/crm/opportunities/{{lead.id}}" class="btn btn-info"><i class="fas fa-edit"></i></a>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                    <app-test *ngIf = "total_opportunity<1"></app-test>
+                                </div>
+                            </div>
+                            <div class="card-footer clearfix">
+                                <a [routerLink]="ShowOpportunity ? '/crm/opportunities/add' : null" class="btn btn-sm btn-info float-left">Add New</a>
+                                <a [routerLink]="ShowOpportunity ? '/crm/opportunities' : null"  class="btn btn-sm btn-secondary float-right">View All</a>
+                            </div>
+                        </div> 
+                    </div>  
+                    <div class="col-md-6">
+                        <div class="card">
+                            <div class="card-header border-transparent">
+                                <h3 class="card-title">Latest Leads</h3>
+                                <div class="card-tools">
+                                    <button type="button" class="btn btn-tool" data-card-widget="collapse">
+                                        <i class="fas fa-minus"></i>
+                                    </button>
+                                    <button type="button" class="btn btn-tool" data-card-widget="remove">
+                                        <i class="fas fa-times"></i>
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="card-body p-0">
+                                <div class="table-responsive">
+                                    <table class="table m-0">
+                                        <thead>
+                                            
+                                                <tr>
+                                                    <th scope="col">Name</th>
+                                                    <th scope="col">Company</th>
+                                                    <th scope="col">Email</th>
+                                                    <th scope="col">Phone</th>
+                                                    <th scope="col">Lead Source</th>
+                                                    <th scope="col">Lead Owner</th>
+                                                    <th style="width: 80px; min-width: 80px;">Action</th>
+                                                </tr>
+                                        
+                                        </thead>
+                                        <tbody>     
+                                            <tr *ngFor = "let lead of leads">
+                                        
+                                                <td>
+                                                    <a href="#" class="text-body">{{lead.first_name}}</a>
+                                                </td>
+                                                <td>{{lead.company}}</td>
+                                                <td>{{lead.email}}</td>
+                                                <td>{{lead.phone}}</td>
+                                                <td>{{lead.lead_source}}</td>
+                                                <td>{{lead.profile.user.name}}</td>
+                                                <td>
+                                                    <div class="btn-group btn-group-sm">
+                                                        <a routerLink="/crm/leads/{{lead.id}}" class="btn btn-info"><i class="fas fa-edit"></i></a>
+                                                    </div>
+                                                </td>
+                                            </tr>                                               
+                                        </tbody>
+                                    </table>
+                                    <app-test *ngIf = "total_leads<1"></app-test>
+                                </div>
+                            </div>
+                            <div class="card-footer clearfix">
+                                <a  [routerLink]="ShowLead ? '/crm/leads/add' : null" class="btn btn-sm btn-info float-left">Add New</a>
+                                <a  [routerLink]="ShowLead ? '/crm/leads' : null"class="btn btn-sm btn-secondary float-right">View All</a>
+                            </div>
+                        </div> 
+                    </div>
+                </div>
+            </div>
+        </section>
+        <!-- <app-account-suspend></app-account-suspend> -->
+    </div>
+    <app-footer *ngIf="loading==false"></app-footer>
+</div>
+
+
+
+ 

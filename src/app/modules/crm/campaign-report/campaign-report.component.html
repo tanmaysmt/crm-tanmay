@@ -1,0 +1,112 @@
+<div class="wrapper">
+    <app-navbar></app-navbar>
+    <app-aside></app-aside>
+    <div class="content-wrapper">
+        <div class="content-header">
+            <div class="container-fluid">
+                <div class="row mb-2">
+                    <div class="col-sm-6">
+                        <h1 class="m-0 text-dark">Campaign Report
+                        </h1>
+                    </div>
+                    <div class="col-sm-6">
+                        <ol class="breadcrumb float-sm-right">
+                            <li class="breadcrumb-item"><a href="#">Home</a></li>
+                            <li class="breadcrumb-item active">Campaign Report</li>
+                        </ol>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <section class="content">
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="card">
+                            <div class="card-header">
+                                <h5 class="card-title">Campaign Recap Report</h5>
+
+                                <div class="card-tools">
+                                    <button type="button" class="btn btn-tool" data-card-widget="collapse">
+                                        <i class="fas fa-minus"></i>
+                                    </button>
+                                    <button type="button" class="btn btn-tool" data-card-widget="remove">
+                                        <i class="fas fa-times"></i>
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="card-body">
+                                <div class="row">
+                                    <div class="col-12 col-sm-6 col-md-3">
+                                        <div class="info-box">
+                                            <span class="info-box-icon bg-info elevation-1"><i class="ion fa fa-bullhorn"></i></span>
+                                
+                                            <div class="info-box-content">
+                                                <span class="info-box-text">Total Leads</span>
+                                                <span class="info-box-number">
+                                                    {{totalleads}}
+                                                </span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-12 col-sm-6 col-md-3">
+                                        <div class="info-box mb-3">
+                                            <span class="info-box-icon bg-success elevation-1"><i class="ion fa fa-bullhorn"></i></span>
+                                            <div class="info-box-content">
+                                                <span class="info-box-text">Leads Called </span>
+                                                <span class="info-box-number">{{leadsCalled.count}}</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="clearfix hidden-md-up"></div>
+                                    <div class="col-12 col-sm-6 col-md-3">
+                                        <div class="info-box mb-3">
+                                            <span class="info-box-icon bg-danger elevation-1"><i class="ion fa fa-bullhorn"></i></span>
+                                
+                                            <div class="info-box-content">
+                                                <span class="info-box-text">Leads Pending</span>
+                                                <span class="info-box-number">{{leadsPending.count}}</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-12 col-sm-6 col-md-3">
+                                        <div class="info-box mb-3">
+                                            <span class="info-box-icon bg-warning elevation-1"><i class="ion fa fa-bullhorn"></i></span>
+                                
+                                            <div class="info-box-content">
+                                                <span class="info-box-text">New Leads</span>
+                                                <span class="info-box-number">{{newLeads.count}}</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>                                
+                            </div>
+                            <div class="card-footer">
+                                <div class="row">
+                                    <div class="col-sm-4 col-6">
+                                        <div class="description-block border-right">
+                                            <h5 class="description-header">Rs. 0</h5>
+                                            <span class="description-text">TOTAL REVENUE</span>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-4 col-6">
+                                        <div class="description-block border-right">
+                                            <h5 class="description-header">Rs. {{campaign.expected_revenue}}</h5>
+                                            <span class="description-text">EXPECTED REVENUE</span>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-4 col-6">
+                                        <div class="description-block border-right">
+                                            <h5 class="description-header">Rs. {{campaign.budgeted_cost}}</h5>
+                                            <span class="description-text">BUDGETED COST</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+</div>

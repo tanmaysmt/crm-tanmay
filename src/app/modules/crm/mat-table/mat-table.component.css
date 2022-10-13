@@ -1,0 +1,18 @@
+table {
+    width: 100%;
+  }
+
+
+  .example-form {
+    min-width: 150px;
+    max-width: 500px;
+    width: 100%;
+  }
+  
+  .example-full-width {
+    width: 100%;
+  }
+
+  .md-autocomplete-suggestions-container{  
+    z-index:100000 !important; /* any number of choice > 1050*/
+   }

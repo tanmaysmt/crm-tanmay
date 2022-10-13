@@ -1,0 +1,283 @@
+<div class="hold-transition sidebar-mini layout-fixed mat-typography">
+<div class="wrapper">
+    <app-navbar (permissions)="receiveMessage($event)"></app-navbar>
+    <app-aside ></app-aside>
+    <div class="cardsloader" *ngIf="loading">
+        <div class="cardloader is-loading">
+            <div class="content">
+                <h2></h2>
+            </div>
+        </div>
+    </div>
+    <div class="content-wrapper" *ngIf="loading==false">
+        <div class="card card-primary card-outline">
+            <img src="assets/images/access_denied.jpg" alt="" srcset="" *ngIf="isAccess==false">
+            <div class="card-body" *ngIf="isAccess">  
+                <div class="row mb-2">
+                    <div class="col-sm-6">
+                        <h1 class="m-0 text-dark">Opportunity</h1>
+                    </div> 
+                    <div class="col-sm-6">
+                        <ol class="breadcrumb float-sm-right">
+                            <li class="breadcrumb-item">
+                                <button  type="button" class="btn btn-primary  btn-sm" data-toggle="modal" data-target="#modal-lg"><i class="fa fa-plus"></i> Import Opportunity</button>
+                            </li>
+                        </ol>
+                    </div>
+                </div>
+                <ul class="nav nav-tabs" id="custom-content-below-tab" role="tablist">
+                    <li class="nav-item">
+                        <a class="nav-link" id="custom-content-below-home-tab" data-toggle="pill"
+                        routerLink="/crm/opportunities" role="tab" aria-controls="custom-content-below-home"
+                            aria-selected="true">Opportunities</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" id="custom-content-below-profile-tab" data-toggle="pill"
+                        (click)="editOpportunity.reset()" routerLink="/crm/opportunities/add" href="#custom-content-below-profile" role="tab" aria-controls="custom-content-below-profile"
+                            aria-selected="true">Add New</a>
+                    </li>
+                </ul>
+                <div class="tab-content" id="custom-content-below-tabContent">
+                    <div class="tab-pane fade show active"  id="custom-content-below-home" role="tabpanel"
+                        aria-labelledby="custom-content-below-home-tab">
+                        <div class="table-responsive mb-4">
+                            <form class="form-horizontal" role="form" [formGroup]="editOpportunity" (ngSubmit)='onSubmit(editOpportunity.value)'>
+                                <div class="card-body">
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <div class="form-group row">
+                                                <label class="col-sm-3 col-form-label">Lead Owner</label>
+                                                <div class="col-sm-9">
+                                                    <select class="form-control" formControlName = "profile_id">
+                                                        <option *ngFor = "let uts of userlists" [selected]="uts.id==SProfileStatus" value = "{{uts.id}}">{{uts.user.name}}</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                            <div class="form-group row">
+                                                <label class="col-sm-3 col-form-label">Opportunity Title<small class="text-danger">*</small></label>
+                                                <div class="col-sm-9">
+                                                    <input type="text" [class.is-invalid]="editOpportunity.get('title')?.invalid && editOpportunity.get('title')?.touched" class="form-control" formControlName = "title" placeholder="Enter Title" />
+                                                    <small [class.d-none]="editOpportunity.get('title')?.valid || editOpportunity.get('title')?.untouched" class="text-danger">Lead Name is Required</small>
+                                                </div>
+                                            </div>
+                                            <div class="form-group row">
+                                                <label class="col-sm-3 col-form-label">First Name <small class="text-danger">*</small></label>
+                                                <div class="col-sm-9">
+                                                    <input type="text" [class.is-invalid]="editOpportunity.get('first_name')?.invalid && editOpportunity.get('first_name')?.touched" class="form-control" formControlName = "first_name" placeholder="Enter First Name" />
+                                                    <small [class.d-none]="editOpportunity.get('first_name')?.valid || editOpportunity.get('first_name')?.untouched" class="text-danger">First Name is Required</small>
+                                                </div>
+                                            </div>
+                                            <div class="form-group row">
+                                                <label class="col-sm-3 col-form-label">Last Name <small class="text-danger">*</small></label>
+                                                <div class="col-sm-9">
+                                                    <input type="text" class="form-control"  [class.is-invalid]="editOpportunity.get('last_name')?.invalid && editOpportunity.get('last_name')?.touched" formControlName = "last_name" placeholder="Enter Last Name" />
+                                                    <small [class.d-none]="editOpportunity.get('last_name')?.valid || editOpportunity.get('last_name')?.untouched" class="text-danger">Last Name is Required</small>
+                                                </div>
+                                            </div>
+                                            <div class="form-group row">
+                                                <label class="col-sm-3 col-form-label">Gender <small class="text-danger">*</small></label>
+                                                <div class="col-sm-9">
+                                                    <select class="form-control" formControlName = "gender">
+                                                        <option value ="">Please Select</option>
+                                                        <option value = "male">Male</option>
+                                                        <option value = "female">Female</option>
+                                                        <option value = "trans">Trans</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                            <div class="form-group row">
+                                                <label class="control-label col-sm-3 col-form-label" >Date of Birth</label>
+                                                <div class="col-sm-9">
+                                                    <input  type="date" formControlName = "dob" class="form-control"> 
+                                                </div>
+                                            </div>
+                                            <div class="form-group row">
+                                                <label class="col-sm-3 col-form-label">Email <small class="text-danger">*</small></label>
+                                                <div class="col-sm-9">
+                                                    <input type="email"  class="form-control" [class.is-invalid]="editOpportunity.get('email')?.invalid && editOpportunity.get('email')?.touched" formControlName = "email" placeholder="Enter Email" />
+                                                    <small [class.d-none]="editOpportunity.get('email')?.valid || editOpportunity.get('email')?.untouched" class="text-danger">Email should be Valid or Required</small>
+                                                </div>
+                                            </div>
+                                            <div class="form-group row">
+                                                <label class="col-sm-3 col-form-label">Secondary email</label>
+                                                <div class="col-sm-9">
+                                                    <input type="email" class="form-control" formControlName = "secondary_email" placeholder="Enter Another Email Address (optional)" />
+                                                </div>
+                                            </div>
+                                            
+                                            <div class="form-group row">
+                                                <label class="col-sm-3 col-form-label">Phone <small class="text-danger">*</small></label>
+                                                <div class="col-sm-9">
+                                                    <input type="number"  class="form-control validatePhone" [class.is-invalid]="editOpportunity.get('phone')?.invalid && editOpportunity.get('phone')?.touched" formControlName = "phone"  placeholder="Enter Phone number" />
+                                                    <small [class.d-none]="editOpportunity.get('phone')?.valid || editOpportunity.get('phone')?.untouched" class="text-danger">Phone length should be 10 or Required</small>
+                                                </div>
+                                            </div>
+                                            <div class="form-group row">
+                                                <label class="col-sm-3 col-form-label">Secondary phone</label>
+                                                <div class="col-sm-9">
+                                                    <input type="number" class="form-control"   formControlName = "secondary_phone" placeholder="Enter Secondary Phone (optional)" />
+                                                </div>
+                                            </div>
+                                            <div class="form-group row">
+                                                <label class="col-sm-3 col-form-label">Company </label>
+                                                <div class="col-sm-9">
+                                                    
+                                                    <input type="text" class="form-control"  formControlName = "company" placeholder="Enter Company" />
+                                                </div>
+                                            </div>
+                                            <div class="form-group row">
+                                                <label class="col-sm-3 col-form-label">Fax</label>
+                                                <div class="col-sm-9">
+                                                    <input type="text" class="form-control"   formControlName = "fax" placeholder="..." />
+                                                </div>
+                                            </div>
+                                            
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="form-group row">
+                                                <label class="col-sm-3 col-form-label">Lead Source </label>
+                                                <div class="col-sm-9">
+                                                    
+                                                    <input type="text" class="form-control" formControlName = "lead_source"  placeholder="Enter lead Source" />
+                                                </div>
+                                            </div>
+                                            <div class="form-group row">
+                                                <label class="col-sm-3 col-form-label">Lead Status </label>
+                                                <div class="col-sm-9">
+                                                    <select class="form-control" formControlName = "lead_status">
+                                                        <option value="">Select Status</option>
+                                                        <option *ngFor = "let sts of leadStatus" value = "{{sts.name}}">{{sts.name}}</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                            <div class="form-group row">
+                                                <label class="col-sm-3 col-form-label">Industry </label>
+                                                <div class="col-sm-9">
+                                                    <input type="text" class="form-control" formControlName = "industry"  placeholder="Enter Industry Type" />
+                                                </div>
+                                            </div>
+                                            <div class="form-group row">
+                                                <label class="col-sm-3 col-form-label">No. of Employee</label>
+                                                <div class="col-sm-9">
+                                                    <input type="number" class="form-control"   formControlName = "number_of_employee"  />
+                                                </div>
+                                            </div>
+                                            <div class="form-group row">
+                                                <label class="col-sm-3 col-form-label">Annual Revenue</label>
+                                                <div class="col-sm-9">
+                                                    <input type="number" class="form-control"   formControlName = "annual_revenue"  placeholder="₹.."/>
+                                                </div>
+                                            </div>
+                                            <div class="form-group row">
+                                                <label class="col-sm-3 col-form-label">Address</label>
+                                                <div class="col-sm-9">
+                                                    <input type="text" class="form-control"   formControlName = "address" placeholder="Enter Address" />
+                                                </div>
+                                            </div>
+                                            <div class="form-group row">
+                                                <label class="col-sm-3 col-form-label">City</label>
+                                                <div class="col-sm-9">
+                                                    <input type="text" class="form-control" formControlName = "city"  placeholder="Enter City" />
+                                                </div>
+                                            </div>
+                                            <div class="form-group row">
+                                                <label class="col-sm-3 col-form-label">State</label>
+                                                <div class="col-sm-9">
+                                                    <select class="form-control" formControlName = "state">
+                                                        <option *ngFor = "let state of states.states" value = "{{state.name}}">{{state.name}}</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                            <div class="form-group row">
+                                                <label class="col-sm-3 col-form-label">Zip</label>
+                                                <div class="col-sm-9">
+                                                    <input type="text" class="form-control" formControlName = "zip" (keyup)="getZipcode(editOpportunity.value.zip)" placeholder="Enter zipcode" />
+                                                </div>
+                                            </div>
+                                            <div class="form-group row">
+                                                <label class="col-sm-3 col-form-label">Country</label>
+                                                <div class="col-sm-9">
+                                                    <input type="text" [attr.disabled] = "true" class="form-control" formControlName = "country" placeholder="Enter Country" />
+                                                </div>
+                                            </div>
+                                            <div class="form-group row">
+                                                <label class="col-sm-3 col-form-label">Campaign</label>
+                                                <div class="col-sm-9">
+                                                    <select class="form-control" formControlName = "campaign">
+                                                        <option value="">-None-</option>
+                                                        <option *ngFor = "let sts of campaigns" value = "{{sts.id}}">{{sts.campaign_name}}</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                            <div class="form-group row">
+                                                <label class="col-sm-3 col-form-label">Website</label>
+                                                <div class="col-sm-9">
+                                                    <input type="text" class="form-control"   formControlName = "website" placeholder="Enter website url" />
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <div class="form-group">
+                                                <label>Description</label>
+                                                <textarea class="form-control" rows="3" formControlName = "description" placeholder="Enter ..."></textarea>
+                                            </div>
+                                              
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="card-footer">
+                                    <button type="submit" class="btn btn-primary">Save Changes</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade" id="modal-lg">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title">Leads Settings</h4>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-lg-6">
+                            <div class="card card-primary card-outline">
+                                <div class="card-header">
+                                    <h5 class="m-0"></h5>
+                                </div>
+                                <div class="card-body">
+                                    <p class="card-text">You must download sample of CSV file for better representations.</p>
+                                    <button class="btn btn-primary" (click)="downloadsample()"><i class="fa fa-download" aria-hidden="true"></i> Download Sample</button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-6">
+                            <div class="card card-primary card-outline">
+                                <div class="card-header">
+                                    <h5 class="m-0"></h5>
+                                </div>
+                                <div class="card-body">
+                                    <form action="" [formGroup]= "importCSV" (ngSubmit)='onImport(importCSV.value)'>
+                                        <input type="file" formControlName="importLead" (change)="onfileselected($event)">
+                                        <p class="card-text">Upload CSV file.</p>
+                                        <button class="btn btn-primary" [disabled]="CSVButton" type ="submit"> <i class="fa fa-upload" aria-hidden="true"></i> Upload File</button>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <app-footer *ngIf="loading==false"></app-footer>
+<div>
+<div>

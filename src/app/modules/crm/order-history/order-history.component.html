@@ -1,0 +1,274 @@
+<div class="wrapper">
+    <app-navbar></app-navbar>
+    <app-aside></app-aside>
+    <div class="cardsloader" *ngIf="loading">
+        <div class="cardloader is-loading">
+            <div class="content">
+                <h2></h2>
+            </div>
+        </div>
+    </div>
+    <div class="content-wrapper" *ngIf="loading==false">
+        <div class="content-header">
+            <div class="container-fluid">
+                <div class="row mb-2">
+                    <div class="col-sm-6">
+                        <h1 class="m-0 text-dark">Orders History</h1>
+                    </div> 
+                    <div class="col-sm-6">
+                        <ol class="breadcrumb float-sm-right">
+                            <li class="breadcrumb-item"><a routerLink="/crm/dashboard">Home</a></li>
+                            <li class="breadcrumb-item active">Order History</li>
+                        </ol>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <section class="content">
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="card">
+                            <div class="card-header">
+                                <h3 class="card-title">Packages</h3>
+                                <a routerLink="/packages" class="btn btn-primary float-right">Buy New Package</a>
+                            </div>
+                            <div class="card-body">
+                                <table class="table table-bordered">
+                                    <thead>
+                                        <tr>
+                                            <th>#Id</th>
+                                            <th>Package</th>
+                                            <th>Amount</th>
+                                            <th>Expiration</th>
+                                            <th>Status</th>
+                                            <th>Validity</th>
+                                            <th>Purchased</th>
+                                            <th>Expired</th>
+                                            <th>Invoice/Details</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr *ngFor="let trans of pTransactions">
+                                            <td>{{trans.order_id}}</td>
+                                            <td>{{trans.ppackage.title}}</td>
+                                            <td>Rs. {{trans.paid_amount}}</td>
+                                            <td>
+                                                <span class="badge bg-success">After {{(trans.validity-calculateDiff(trans.created_at))}} days </span>
+                                            </td>
+                                            <td>
+                                                <span class="badge bg-danger" *ngIf="trans.is_active==0">Disable</span>
+                                                <span class="badge bg-success" *ngIf="trans.is_active==1">Enable</span>
+                                            </td>
+                                            <td>
+                                                {{trans.validity}}
+                                            </td>
+                                            <td>{{trans.created_at | date}}</td>
+                                            <td>{{calculatExpiry(trans.created_at,trans.validity) | date}}</td>
+                                            <td>
+                                                <a *ngIf ="trans.paid_amount > 0.00" routerLink = "/crm/package-invoice/{{trans.order_id}}" class="btn btn-info btn-sm"><i class="fas fa-file-invoice"></i></a>
+                                                <button class="btn btn-info btn-sm ml-2" (click)="getPackageDetails(trans.order_id)"><i class="fas fa-eye"></i></button>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <section class="content">
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="card">
+                            <div class="card-header">
+                                <h3 class="card-title">Topups</h3>
+                            </div>
+                            <div class="card-body">
+                                <table class="table table-bordered">
+                                    <thead>
+                                        <tr>
+                                            <th>#Id</th>
+                                            <th>Topup</th>
+                                            <th>Amount</th>
+                                            <th>Status</th>
+                                            <th>Purchased</th>
+                                            <th>Invoice</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr *ngFor="let trans of TTransactions">
+                                            <td>{{trans.order_id}}</td>
+                                            <td>{{trans.ptopup.title}}</td>
+                                            <td>Rs. {{trans.paid_amount}}</td>
+                                            <td>
+                                                <span class="badge bg-danger" *ngIf="trans.is_active==0">Disable</span>
+                                                <span class="badge bg-success" *ngIf="trans.is_active==1">Enable</span>
+                                            </td>
+                                            <td>{{trans.created_at | date}}</td>
+                                            <td>
+                                                <a routerLink = "/crm/topup-invoice/{{trans.order_id}}" class="btn btn-info btn-sm"><i class="fas fa-file-invoice"></i></a>
+                                                <button class="btn btn-info btn-sm ml-2" (click)="getTopupDatails(trans.order_id)"><i class="fas fa-eye"></i></button>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+    <app-footer *ngIf="loading==false"></app-footer>
+</div>
+<div class="modal fade" id="modal-PackageDetails" *ngIf="PackageDetails">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Confirmation </h5>
+                <button type="button" class="close"  data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="card">
+                            <div class="card-header">
+                                <h3 class="card-title">
+                                    <i class="fas fa-text-width"></i>
+                                    Package Type :- {{ppackage.title}}
+                                </h3>
+                            </div>
+                            <div class="card-body">
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <dl class="row">
+                                            <dt class="col-sm-4">Order id </dt>
+                                            <dd class="col-sm-8">{{transaction.order_id}}</dd>
+                                            <dt class="col-sm-4">Valid Days</dt>
+                                            <dd class="col-sm-8">{{transaction.validity}} days</dd>
+                                            <dt class="col-sm-4">Paid Amount </dt>
+                                            <dd class="col-sm-8">Rs. {{ppackage.amount}}</dd> 
+                                            <dt class="col-sm-4">Date of Allotment</dt>
+                                            <dd class="col-sm-8">{{ ppackage.created_at | date}} </dd>                                       
+                                        </dl>
+                                    </div>
+                                    <div class="col-md-6" *ngIf="ppackage.amount > 0.00">
+                                        <dl class="row">
+                                            <dt class="col-sm-4">Payment Method </dt>
+                                            <dd class="col-sm-8">{{razor.payment_method}}</dd>
+                                            <dt class="col-sm-4">Method Name</dt>
+                                            <dd class="col-sm-8">{{razor.card_id ?? ''}} {{razor.bank ?? ''}} {{razor.wallet ?? ''}} {{razor.vpa ?? ''}}</dd>
+                                            <dt class="col-sm-4">Email  </dt>
+                                            <dd class="col-sm-8">{{razor.email}}</dd>
+                                            <dt class="col-sm-4">Contact  </dt>
+                                            <dd class="col-sm-8">{{razor.contact}}</dd>
+                                        </dl>
+                                    </div>
+                                </div>             
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-12">
+                        <div class="card">
+                            <div class="card-header">
+                                <h3 class="card-title">
+                                    <i class="fas fa-text-width"></i>
+                                    Services
+                                </h3>
+                            </div>
+                            <div class="card-body">
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="row">
+                                            <div class="col-sm-12" *ngFor="let item of ppackage.services">
+                                               <strong>{{item.service_name}}</strong> : {{item.quantity}}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>                        
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="modal-TopupDetails" *ngIf="TopupDetails">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Confirmation </h5>
+                <button type="button" class="close"  data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="card">
+                            <div class="card-header">
+                                <h3 class="card-title">
+                                    <i class="fas fa-text-width"></i>
+                                    Topup Name :- {{ptopup.title}}
+                                </h3>
+                            </div>
+                            <div class="card-body">
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <dl class="row">
+                                            <dt class="col-sm-4">Order id </dt>
+                                            <dd class="col-sm-8">{{transaction.order_id}}</dd>
+                                            <dt class="col-sm-4">Paid Amount </dt>
+                                            <dd class="col-sm-8">Rs. {{ptopup.amount}}</dd> 
+                                            <dt class="col-sm-4">Date of Allotment</dt>
+                                            <dd class="col-sm-8">{{ ptopup.created_at | date}} </dd>                                       
+                                        </dl>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <dl class="row">
+                                            <dt class="col-sm-4">Payment Method </dt>
+                                            <dd class="col-sm-8">{{razor.payment_method}}</dd>
+                                            <dt class="col-sm-4">Method Name</dt>
+                                            <dd class="col-sm-8">{{razor.card_id ?? ''}} {{razor.bank ?? ''}} {{razor.wallet ?? ''}} {{razor.vpa ?? ''}}</dd>
+                                            <dt class="col-sm-4">Email  </dt>
+                                            <dd class="col-sm-8">{{razor.email}}</dd>
+                                            <dt class="col-sm-4">Contact  </dt>
+                                            <dd class="col-sm-8">{{razor.contact}}</dd>
+                                        </dl>
+                                    </div>
+                                </div>             
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-12">
+                        <div class="card">
+                            <div class="card-header">
+                                <h3 class="card-title">
+                                    <i class="fas fa-text-width"></i>
+                                    Services
+                                </h3>
+                            </div>
+                            <div class="card-body">
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="row">
+                                            <div class="col-sm-12" *ngFor="let item of ptopup.services">
+                                               <strong>{{item.service_name}}</strong> : {{item.quantity}}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>                        
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
